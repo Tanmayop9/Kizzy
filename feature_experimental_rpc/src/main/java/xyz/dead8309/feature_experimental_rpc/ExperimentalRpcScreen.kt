@@ -73,6 +73,8 @@ private val completions = listOf(
     TemplateKeys.MEDIA_ARTIST to R.string.completion_media_artist,
     TemplateKeys.MEDIA_AUTHOR to R.string.completion_media_author,
     TemplateKeys.APP_NAME to R.string.completion_app_name,
+    TemplateKeys.APP_ACTIVITY to R.string.completion_app_activity,
+    TemplateKeys.APP_STATE to R.string.completion_app_state,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)

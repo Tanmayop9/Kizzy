@@ -18,10 +18,7 @@ import android.content.Context
 import com.blankj.utilcode.util.AppUtils
 import com.my.kizzy.data.rpc.CommonRpc
 import com.my.kizzy.data.rpc.RpcImage
-import com.my.kizzy.preference.Prefs
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import java.util.Objects
 import java.util.SortedMap
 import java.util.TreeMap
@@ -29,6 +26,7 @@ import javax.inject.Inject
 
 class GetCurrentlyRunningApp @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val appActivityDetector: AppActivityDetector
 ) {
     operator fun invoke(beginTime: Long = System.currentTimeMillis() - 10000): CommonRpc {
         val usageStatsManager =
@@ -45,14 +43,20 @@ class GetCurrentlyRunningApp @Inject constructor(
             if (!(treeMap.isEmpty() || treeMap[treeMap.lastKey()]?.packageName == "com.my.kizzy" || treeMap[treeMap.lastKey()]?.packageName == "com.discord")) {
                 val packageName = treeMap[treeMap.lastKey()]!!.packageName
                 Objects.requireNonNull(packageName)
+                val appName = AppUtils.getAppName(packageName)
+
+                // Use enhanced activity detection if available for this app
+                if (appActivityDetector.hasEnhancedDetection(packageName)) {
+                    return appActivityDetector.getEnhancedActivity(packageName, appName)
+                }
+
                 return CommonRpc(
-                    name = AppUtils.getAppName(packageName),
+                    name = appName,
                     details = null,
                     state = null,
                     largeImage = RpcImage.ApplicationIcon(packageName, context),
                     packageName = packageName
                 )
-
             }
         }
         return CommonRpc()

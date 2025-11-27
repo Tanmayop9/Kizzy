@@ -228,6 +228,19 @@ object Prefs {
         "com.google.android.apps.mediashell",
         "com.google.android.videos",
         "org.videolan.vlc",
+
+        // social media apps with video content
+        "com.instagram.android",
+        "com.instagram.lite",
+        "com.zhiliaoapp.musically", // TikTok
+        "com.ss.android.ugc.trill", // TikTok alternate
+
+        // screen mirroring apps
+        "com.nicnet.netmirror",
+
+        // education apps
+        "xyz.penpencil.physicswala",
+        "xyz.penpencil.pathshala",
     )
 
     //Experimental RPC Preferences

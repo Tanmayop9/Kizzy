@@ -20,6 +20,8 @@ class TemplateKeys {
         const val MEDIA_ARTIST = "{{media_artist}}"
         const val MEDIA_AUTHOR = "{{media_author}}"
         const val APP_NAME = "{{app_name}}"
+        const val APP_ACTIVITY = "{{app_activity}}"
+        const val APP_STATE = "{{app_state}}"
     }
 }
 
@@ -50,7 +52,10 @@ class TemplateProcessor(
                 )
                 .replace(TemplateKeys.APP_NAME, mediaPlayerAppName)
         } else if (detectedAppInfo != null) {
-            result = result.replace(TemplateKeys.APP_NAME, detectedAppInfo.name)
+            result = result
+                .replace(TemplateKeys.APP_NAME, detectedAppInfo.name)
+                .replace(TemplateKeys.APP_ACTIVITY, detectedAppInfo.details ?: "")
+                .replace(TemplateKeys.APP_STATE, detectedAppInfo.state ?: "")
         }
 
         // NOTE: remove unreplaced placeholders

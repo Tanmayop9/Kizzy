@@ -43,6 +43,12 @@ open class DiscordWebSocketImpl(
         encodeDefaults = true
     }
 
+    // Rate limiting: Track last presence update time to prevent account bans
+    // Discord recommends no more than 5 presence updates per 20 seconds
+    // We'll use a minimum 10 second gap between updates for safety
+    private var lastPresenceUpdateTime = 0L
+    private val minimumPresenceUpdateInterval = 10_000L // 10 seconds minimum between updates
+
     override val coroutineContext: CoroutineContext
         get() = SupervisorJob() + Dispatchers.Default
 
@@ -224,11 +230,26 @@ open class DiscordWebSocketImpl(
         while (!isSocketConnectedToAccount()){
             delay(10.milliseconds)
         }
+        
+        // Rate limiting to prevent account bans
+        // Discord's rate limit is roughly 5 presence updates per 20 seconds
+        // We enforce a minimum 10 second gap between updates for safety
+        val currentTime = System.currentTimeMillis()
+        val timeSinceLastUpdate = currentTime - lastPresenceUpdateTime
+        
+        if (timeSinceLastUpdate < minimumPresenceUpdateInterval) {
+            val waitTime = minimumPresenceUpdateInterval - timeSinceLastUpdate
+            logger.d("Gateway", "Rate limiting: waiting ${waitTime}ms before sending presence update")
+            delay(waitTime)
+        }
+        
         logger.i("Gateway","Sending $PRESENCE_UPDATE")
         send(
             op = PRESENCE_UPDATE,
             d = presence
         )
+        // Update timestamp after successful send to ensure accurate rate limiting
+        lastPresenceUpdateTime = System.currentTimeMillis()
     }
 
 }

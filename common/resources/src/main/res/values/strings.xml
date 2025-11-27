@@ -211,6 +211,8 @@
     <string name="completion_media_title">Song/Video Title</string>
     <string name="completion_media_artist">Main Artist</string>
     <string name="completion_app_name">Detected App Name</string>
+    <string name="completion_app_activity">App Activity (e.g., Watching Reels)</string>
+    <string name="completion_app_state">App State Details</string>
     <string name="show_cover_art">Show Cover Art</string>
     <string name="show_cover_art_desc">Display album cover art as large image</string>
     <string name="enable_experimental_rpc">Enable Experimental RPC</string>
