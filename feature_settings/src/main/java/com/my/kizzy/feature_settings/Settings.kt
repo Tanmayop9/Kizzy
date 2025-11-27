@@ -314,7 +314,8 @@ fun SettingsDrawerPreview() {
             navigateToStyleAndAppearance = {},
             navigateToLanguages = {},
             navigateToAbout = {},
-            navigateToRpcSettings = {}
+            navigateToRpcSettings = {},
+            navigateToLogsScreen = {}
         ) {}
     }
 }
