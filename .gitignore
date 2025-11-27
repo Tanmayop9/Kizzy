@@ -11,6 +11,7 @@ local.properties
 /app/Kizzy.keystore
 /app/debug/
 /buildSrc/build/
+gradle/verification-metadata.xml
 
 # User-specific configurations
 .idea/caches/

@@ -114,7 +114,9 @@ class AppDetectionService : Service() {
                         handleValidPackage(packageName, enabledPackages, rpcButtons)
                     }
                 }
-                delay(5000)
+                // Using 15 second delay to avoid rate limiting and potential account bans
+                // Discord's presence update rate limit is roughly 5 per 20 seconds
+                delay(15000)
             }
         }
     }
