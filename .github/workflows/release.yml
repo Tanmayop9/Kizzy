@@ -50,15 +50,16 @@ jobs:
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
         with:
+          tag_name: v${{ steps.get_version.outputs.version }}
           name: Kizzy v${{ steps.get_version.outputs.version }}
           body: |
             ## Kizzy v${{ steps.get_version.outputs.version }}
             
             ### What's New
             - Bug fixes and improvements
-            - Enhanced stability
+            - Performance enhancements
+            - UI/UX improvements
             
             ### Download
             Download the APK below to install.
@@ -70,9 +71,9 @@ jobs:
           files: app/build/outputs/apk/release/*.apk
           draft: false
           prerelease: false
+          generate_release_notes: true
 
-      - name: Upload Release APK (Manual Dispatch)
-        if: github.event_name == 'workflow_dispatch'
+      - name: Upload Release APK as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Kizzy-v${{ steps.get_version.outputs.version }}-release
