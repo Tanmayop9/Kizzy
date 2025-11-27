@@ -1,43 +1,55 @@
-name: Test Build
+name: Build APK
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "main" ]
     paths-ignore:
       - 'metadata/**'
+      - '*.md'
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "main" ]
     paths-ignore:
       - 'metadata/**'
+      - '*.md'
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build Apk
+    name: Build APK
     runs-on: ubuntu-latest
     steps:
       - name: Cancel previous runs
-        uses: styfle/cancel-workflow-action@0.5.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ github.token }}
 
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup jdk-17
-        uses: actions/setup-java@main
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
         with:
           java-version: 17
-          distribution: 'adopt'
+          distribution: 'temurin'
           cache: gradle
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Assemble Debug
-        run: ./gradlew assembleDebug
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --no-daemon
 
-      - name: Upload APK
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: apk-debug
-          path: app/build/outputs/apk/debug/**.apk
+          name: Kizzy-debug
+          path: app/build/outputs/apk/debug/*.apk
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kizzy-release
+          path: app/build/outputs/apk/release/*.apk
