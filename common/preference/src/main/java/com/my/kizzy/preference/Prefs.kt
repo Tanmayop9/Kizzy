@@ -291,4 +291,102 @@ object Prefs {
 
         set(ENABLED_EXPERIMENTAL_APPS, Json.encodeToString(enabledPackages))
     }
+
+    // VC Stay Preferences
+    const val LAST_VC_GUILD_ID = "last_vc_guild_id"
+    const val LAST_VC_CHANNEL_ID = "last_vc_channel_id"
+    const val LAST_VC_SELF_MUTE = "last_vc_self_mute"
+    const val LAST_VC_SELF_DEAF = "last_vc_self_deaf"
+    const val VC_STAY_AUTO_RECONNECT = "vc_stay_auto_reconnect"
+
+    // Advanced Features Preferences
+    const val AUTO_START_RPC_ON_BOOT = "auto_start_rpc_on_boot"
+    const val AUTO_START_RPC_TYPE = "auto_start_rpc_type"
+    const val BATTERY_SAVER_MODE = "battery_saver_mode"
+    const val SHOW_CONNECTION_STATUS = "show_connection_status"
+    const val RPC_HISTORY = "rpc_history"
+    const val FAVORITE_RPC_CONFIGS = "favorite_rpc_configs"
+    const val QUICK_SWITCH_ENABLED = "quick_switch_enabled"
+    const val INVISIBLE_MODE = "invisible_mode"
+    const val RANDOM_RPC_ROTATION = "random_rpc_rotation"
+    const val RANDOM_RPC_INTERVAL = "random_rpc_interval"
+    const val SCHEDULED_RPC_ENABLED = "scheduled_rpc_enabled"
+    const val SCHEDULED_RPC_START_TIME = "scheduled_rpc_start_time"
+    const val SCHEDULED_RPC_END_TIME = "scheduled_rpc_end_time"
+
+    // RPC History functions
+    fun addToRpcHistory(config: String) {
+        val history = get(RPC_HISTORY, "[]")
+        val historyList: ArrayList<String> = try {
+            Json.decodeFromString(history)
+        } catch (_: Exception) {
+            arrayListOf()
+        }
+        // Remove if already exists to avoid duplicates
+        historyList.remove(config)
+        // Add to front
+        historyList.add(0, config)
+        // Keep only last 20 items
+        while (historyList.size > 20) {
+            historyList.removeAt(historyList.size - 1)
+        }
+        set(RPC_HISTORY, Json.encodeToString(historyList))
+    }
+
+    fun getRpcHistory(): List<String> {
+        val history = get(RPC_HISTORY, "[]")
+        return try {
+            Json.decodeFromString(history)
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
+
+    fun clearRpcHistory() {
+        set(RPC_HISTORY, "[]")
+    }
+
+    // Favorite RPC Configs functions
+    fun addToFavorites(configName: String) {
+        val favorites = get(FAVORITE_RPC_CONFIGS, "[]")
+        val favoritesList: ArrayList<String> = try {
+            Json.decodeFromString(favorites)
+        } catch (_: Exception) {
+            arrayListOf()
+        }
+        if (!favoritesList.contains(configName)) {
+            favoritesList.add(configName)
+            set(FAVORITE_RPC_CONFIGS, Json.encodeToString(favoritesList))
+        }
+    }
+
+    fun removeFromFavorites(configName: String) {
+        val favorites = get(FAVORITE_RPC_CONFIGS, "[]")
+        val favoritesList: ArrayList<String> = try {
+            Json.decodeFromString(favorites)
+        } catch (_: Exception) {
+            arrayListOf()
+        }
+        favoritesList.remove(configName)
+        set(FAVORITE_RPC_CONFIGS, Json.encodeToString(favoritesList))
+    }
+
+    fun isFavorite(configName: String): Boolean {
+        val favorites = get(FAVORITE_RPC_CONFIGS, "[]")
+        val favoritesList: ArrayList<String> = try {
+            Json.decodeFromString(favorites)
+        } catch (_: Exception) {
+            arrayListOf()
+        }
+        return favoritesList.contains(configName)
+    }
+
+    fun getFavorites(): List<String> {
+        val favorites = get(FAVORITE_RPC_CONFIGS, "[]")
+        return try {
+            Json.decodeFromString(favorites)
+        } catch (_: Exception) {
+            emptyList()
+        }
+    }
 }

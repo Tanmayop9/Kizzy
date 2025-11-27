@@ -221,4 +221,140 @@
     <string name="set_imgur_client_id">Set Imgur Client ID</string>
     <string name="set_imgur_client_id_desc">If images aren\'t showing using Imgur, you can try setting your own Client ID</string>
     <string name="show_song_as_title">Show Song as Title</string>
+
+    <!-- VC Stay Feature -->
+    <string name="main_vcStay">24/7 VC Stay</string>
+    <string name="main_vcStay_details">Stay connected to a Discord voice channel 24/7 without keeping the app open. Perfect for music bots or just hanging out.</string>
+    <string name="vc_stay_running">24/7 VC Stay Active</string>
+    <string name="vc_stay_connected">Connected to voice channel</string>
+    <string name="vc_stay_disconnected">Disconnected from voice channel</string>
+    <string name="vc_stay_guild_id">Server (Guild) ID</string>
+    <string name="vc_stay_channel_id">Voice Channel ID</string>
+    <string name="vc_stay_self_mute">Self Mute</string>
+    <string name="vc_stay_self_deaf">Self Deafen</string>
+    <string name="vc_stay_auto_reconnect">Auto Reconnect</string>
+    <string name="vc_stay_auto_reconnect_desc">Automatically reconnect if disconnected</string>
+    <string name="enable_vc_stay">Enable 24/7 VC Stay</string>
+    <string name="vc_stay_how_to_get_ids">How to get Server and Channel IDs</string>
+    <string name="vc_stay_ids_instructions">Enable Developer Mode in Discord Settings → Advanced, then right-click on the server/channel and select \"Copy ID\"</string>
+
+    <!-- Advanced Features -->
+    <string name="auto_start_on_boot">Auto-Start on Boot</string>
+    <string name="auto_start_on_boot_desc">Automatically start RPC when your device boots up</string>
+    <string name="battery_saver_mode">Battery Saver Mode</string>
+    <string name="battery_saver_mode_desc">Reduce battery usage by limiting background activity</string>
+    <string name="connection_status">Connection Status</string>
+    <string name="connection_status_desc">Show real-time connection status indicator</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="connecting">Connecting...</string>
+    <string name="reconnecting">Reconnecting...</string>
+
+    <!-- RPC History -->
+    <string name="rpc_history">RPC History</string>
+    <string name="rpc_history_desc">View and quickly reuse your recent RPC configurations</string>
+    <string name="clear_history">Clear History</string>
+    <string name="no_history">No history yet</string>
+    <string name="recently_used">Recently Used</string>
+
+    <!-- Favorites -->
+    <string name="favorites">Favorites</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
+    <string name="no_favorites">No favorites yet</string>
+
+    <!-- Quick Switch -->
+    <string name="quick_switch">Quick Switch</string>
+    <string name="quick_switch_desc">Quickly switch between different RPC types</string>
+
+    <!-- Invisible Mode -->
+    <string name="invisible_mode">Invisible Mode</string>
+    <string name="invisible_mode_desc">Run RPC while appearing offline to others</string>
+
+    <!-- Random RPC Rotation -->
+    <string name="random_rpc_rotation">Random RPC Rotation</string>
+    <string name="random_rpc_rotation_desc">Automatically rotate between your favorite RPC configs</string>
+    <string name="rotation_interval">Rotation Interval</string>
+    <string name="rotation_interval_minutes">Rotation interval (minutes)</string>
+
+    <!-- Scheduled RPC -->
+    <string name="scheduled_rpc">Scheduled RPC</string>
+    <string name="scheduled_rpc_desc">Automatically enable/disable RPC at specific times</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="schedule_active">Schedule Active</string>
+
+    <!-- Profile Management -->
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_avatar">Change Avatar</string>
+    <string name="change_banner">Change Banner</string>
+    <string name="change_bio">Change Bio</string>
+    <string name="change_status">Change Status</string>
+    <string name="profile_updated">Profile updated successfully</string>
+    <string name="profile_update_failed">Failed to update profile</string>
+    <string name="select_image">Select Image</string>
+    <string name="upload_from_gallery">Upload from Gallery</string>
+    <string name="enter_bio">Enter your bio</string>
+    <string name="bio_max_chars">Bio (max 190 characters)</string>
+
+    <!-- Connection Quality -->
+    <string name="connection_quality">Connection Quality</string>
+    <string name="excellent">Excellent</string>
+    <string name="good">Good</string>
+    <string name="poor">Poor</string>
+    <string name="latency">Latency</string>
+
+    <!-- Statistics -->
+    <string name="statistics">Statistics</string>
+    <string name="total_uptime">Total Uptime</string>
+    <string name="sessions_today">Sessions Today</string>
+    <string name="most_used_rpc">Most Used RPC</string>
+
+    <!-- Themes and Customization -->
+    <string name="accent_colors">Accent Colors</string>
+    <string name="custom_accent">Custom Accent Color</string>
+    <string name="gradient_background">Gradient Background</string>
+    <string name="animated_backgrounds">Animated Backgrounds</string>
+
+    <!-- Notifications -->
+    <string name="notification_settings">Notification Settings</string>
+    <string name="silent_notifications">Silent Notifications</string>
+    <string name="persistent_notification">Persistent Notification</string>
+
+    <!-- Advanced Settings -->
+    <string name="advanced_features">Advanced Features</string>
+    <string name="developer_options">Developer Options</string>
+    <string name="debug_mode">Debug Mode</string>
+    <string name="debug_mode_desc">Enable verbose logging</string>
+    <string name="export_logs">Export Logs</string>
+    <string name="import_config">Import Config</string>
+    <string name="export_config">Export Config</string>
+    <string name="backup_restore">Backup &amp; Restore</string>
+    <string name="create_backup">Create Backup</string>
+    <string name="restore_backup">Restore Backup</string>
+    <string name="power_performance">Power &amp; Performance</string>
+    <string name="privacy">Privacy</string>
+    <string name="automation">Automation</string>
+    <string name="minutes">minutes</string>
+    <string name="history_cleared">History cleared</string>
+
+    <!-- Widgets -->
+    <string name="widget_settings">Widget Settings</string>
+    <string name="add_widget">Add Widget to Home Screen</string>
+    <string name="widget_style">Widget Style</string>
+
+    <!-- Server/Guild Management -->
+    <string name="my_servers">My Servers</string>
+    <string name="server_list">Server List</string>
+    <string name="voice_channels">Voice Channels</string>
+    <string name="text_channels">Text Channels</string>
+    <string name="refresh_servers">Refresh Servers</string>
+
+    <!-- Misc -->
+    <string name="coming_soon_feature">This feature is coming soon!</string>
+    <string name="premium_feature">Premium Feature</string>
+    <string name="unlock_premium">Unlock Premium</string>
+    <string name="share_app">Share App</string>
+    <string name="rate_app">Rate App</string>
+    <string name="join_discord">Join Discord Server</string>
 </resources>

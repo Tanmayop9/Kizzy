@@ -52,6 +52,7 @@ dependencies {
     implementation (projects.featureConsoleRpc)
     implementation (projects.featureCustomRpc)
     implementation (projects.featureExperimentalRpc)
+    implementation (projects.featureVcStay)
     implementation (projects.featureHome)
     implementation (projects.common.preference)
     implementation (projects.common.navigation)
