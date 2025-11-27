@@ -12,22 +12,25 @@
 
 package com.my.kizzy.ui.components
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.my.kizzy.ui.theme.getColorScheme
 
 @Composable
 fun SwitchBar(
@@ -36,34 +39,55 @@ fun SwitchBar(
     enabled: Boolean = true,
     onClick: () -> Unit
 ) {
-    val colorScheme = getColorScheme(darkTheme = false)
-    Row(
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isChecked) 
+            MaterialTheme.colorScheme.primaryContainer 
+        else 
+            MaterialTheme.colorScheme.surfaceVariant,
+        animationSpec = tween(300),
+        label = "backgroundColor"
+    )
+    
+    val contentColor by animateColorAsState(
+        targetValue = if (isChecked) 
+            MaterialTheme.colorScheme.onPrimaryContainer 
+        else 
+            MaterialTheme.colorScheme.onSurfaceVariant,
+        animationSpec = tween(300),
+        label = "contentColor"
+    )
+
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-            .clip(RoundedCornerShape(25.dp))
-            .background(colorScheme.primaryContainer)
-            .toggleable(enabled){
-                onClick()
-            }
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceAround
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        shape = RoundedCornerShape(25.dp),
+        color = backgroundColor,
+        shadowElevation = if (isChecked) 4.dp else 1.dp
     ) {
-        with(MaterialTheme) {
+        Row(
+            modifier = Modifier
+                .toggleable(enabled) { onClick() }
+                .padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Text(
-                modifier = Modifier.weight(4f),
+                modifier = Modifier.weight(1f),
                 text = title,
                 maxLines = 1,
-                style = typography.titleLarge.copy(fontSize = 20.sp),
-                color = colorScheme.onSurface,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = contentColor,
                 overflow = TextOverflow.Ellipsis
             )
+            Spacer(modifier = Modifier.width(16.dp))
             KSwitch(
-                modifier = Modifier.weight(1f),
                 checked = isChecked,
                 enable = enabled
-            ){
+            ) {
                 if (enabled) onClick()
             }
         }

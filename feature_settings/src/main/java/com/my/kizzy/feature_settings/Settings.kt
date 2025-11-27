@@ -16,6 +16,7 @@ import androidx.compose.material.icons.automirrored.rounded.HelpOutline
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -25,10 +26,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -198,13 +196,17 @@ fun SettingsItemCard(
     onClick: () -> Unit = {},
 ) {
     NavigationDrawerItem(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp),
         label = {
             Text(
                 text = title,
                 maxLines = 1,
-                style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp)
-                    .copy(fontWeight = FontWeight.SemiBold),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
+                ),
             )
         },
         icon = {
@@ -212,12 +214,13 @@ fun SettingsItemCard(
                 imageVector = icon,
                 contentDescription = title,
                 modifier = Modifier
-                    .padding(end = 5.dp)
-                    .size(28.dp)
+                    .padding(end = 8.dp)
+                    .size(24.dp)
             )
         },
         selected = selected,
-        onClick = { onClick() }
+        onClick = { onClick() },
+        shape = RoundedCornerShape(12.dp)
     )
 }
 
@@ -229,51 +232,57 @@ fun ProfileCardSmall(
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(15.dp)),
+            .padding(top = 8.dp),
         colors = CardDefaults.elevatedCardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
+            containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
-        onClick = navigateToProfile
+        onClick = navigateToProfile,
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
     ) {
         Row(
             modifier = Modifier
-                .padding(8.dp)
+                .padding(12.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row {
+            Surface(
+                modifier = Modifier.size(48.dp),
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.surface,
+                shadowElevation = 2.dp
+            ) {
                 AsyncImage(
                     model = user?.getAvatarImage(),
                     modifier = Modifier
-                        .padding(end = 10.dp)
-                        .size(50.dp)
+                        .size(48.dp)
                         .clip(CircleShape),
                     contentDescription = user?.username,
                     error = painterResource(R.drawable.error_avatar),
                     placeholder = painterResource(R.drawable.error_avatar),
                 )
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
                 Text(
-                    buildAnnotatedString {
-                        withStyle(
-                            style = MaterialTheme.typography.titleLarge.copy(
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                textAlign = TextAlign.Left
-                            ).toSpanStyle()
-                        ) {
-                            append((user?.globalName ?: user?.username) + "\r\n")
-                        }
-                        withStyle(
-                            style = MaterialTheme.typography.titleSmall.copy(
-                                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                textAlign = TextAlign.Left
-                            ).toSpanStyle()
-                        ) {
-                            append(user?.username)
-                            if (user?.discriminator != "0")
-                                append("#${user?.discriminator}")
-                        }
-                    }
+                    text = user?.globalName ?: user?.username ?: "",
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    maxLines = 1
+                )
+                Text(
+                    text = buildString {
+                        append(user?.username ?: "")
+                        if (user?.discriminator != "0" && user?.discriminator != null)
+                            append("#${user.discriminator}")
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f),
+                    maxLines = 1
                 )
             }
         }
