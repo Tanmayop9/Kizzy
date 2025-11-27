@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -34,7 +36,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.Kizzy"
-        tools:targetApi="tiramisu">
+        tools:targetApi="upside_down_cake">
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -82,7 +84,12 @@
 
         <service
             android:name="com.my.kizzy.feature_rpc_base.services.AppDetectionService"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Discord Rich Presence for running apps" />
+        </service>
         <service
             android:name="com.my.kizzy.feature_rpc_base.services.MediaRpcService"
             android:exported="false"
@@ -97,7 +104,11 @@
         </service>
         <service
             android:name="com.my.kizzy.feature_rpc_base.services.CustomRpcService"
-            android:exported="false" >
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Discord Custom Rich Presence" />
         </service>
 
         <service
@@ -110,7 +121,12 @@
         </service>
 
         <service android:name=".feature_rpc_base.services.ExperimentalRpc"
-            android:exported="false"/>
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Discord Experimental Rich Presence" />
+        </service>
 
         <service
             android:name=".feature_rpc_base.services.KizzyTileService"

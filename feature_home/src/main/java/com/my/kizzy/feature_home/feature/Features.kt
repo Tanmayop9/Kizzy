@@ -12,7 +12,8 @@
 
 package com.my.kizzy.feature_home.feature
 
-import androidx.compose.foundation.background
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,18 +27,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.RichTooltip
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -56,19 +58,40 @@ fun Features(
     homeItems: List<HomeFeature> = emptyList(), onValueUpdate: (Int) -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
-    val brush = Brush.linearGradient(
-        listOf(
-            MaterialTheme.colorScheme.secondaryContainer,
-            MaterialTheme.colorScheme.secondaryContainer.copy(0.8f),
-            MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.6f)
-        )
-    )
     val featureSize = (LocalConfiguration.current.screenWidthDp.dp / 2)
+    
     FlowRow(
         mainAxisSize = SizeMode.Expand,
         mainAxisAlignment = FlowMainAxisAlignment.SpaceBetween
     ) {
         for (i in homeItems.indices) {
+            val backgroundColor by animateColorAsState(
+                targetValue = if (homeItems[i].isChecked) 
+                    MaterialTheme.colorScheme.primaryContainer 
+                else 
+                    MaterialTheme.colorScheme.surfaceVariant,
+                animationSpec = tween(300),
+                label = "featureBg$i"
+            )
+            
+            val contentColor by animateColorAsState(
+                targetValue = if (homeItems[i].isChecked) 
+                    MaterialTheme.colorScheme.onPrimaryContainer 
+                else 
+                    MaterialTheme.colorScheme.onSurfaceVariant,
+                animationSpec = tween(300),
+                label = "featureContent$i"
+            )
+            
+            val iconColor by animateColorAsState(
+                targetValue = if (homeItems[i].isChecked) 
+                    MaterialTheme.colorScheme.primary 
+                else 
+                    MaterialTheme.colorScheme.secondary,
+                animationSpec = tween(300),
+                label = "featureIcon$i"
+            )
+
             if (homeItems[i].tooltipText.isNotBlank()) {
                 TooltipBox(
                     positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
@@ -98,142 +121,96 @@ fun Features(
                         )
                     },
                 ) {
-                    Box(modifier = Modifier
-                        .size(featureSize)
-                        .padding(9.dp)
-                        .aspectRatio(1f)
-                        .clip(homeItems[i].shape)
-                        .background(
-                            brush = if (homeItems[i].isChecked) {
-                                Brush.linearGradient(
-                                    listOf(
-                                        MaterialTheme.colorScheme.primaryContainer,
-                                        MaterialTheme.colorScheme.primaryContainer.copy(0.8f),
-                                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
-                                    )
-                                )
-                            } else {
-                                brush
-                            }
-                        )
-                        .clickable { homeItems[i].route?.let { homeItems[i].onClick(it) } }) {
-                        Column(
-                            Modifier
-                                .fillMaxSize()
-                                .padding(15.dp, 15.dp, 2.dp, 15.dp)
-                        ) {
-                            Icon(
-                                tint = if (homeItems[i].isChecked) MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.secondary,
-                                painter = painterResource(id = homeItems[i].icon),
-                                contentDescription = "",
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(5.dp, 0.dp)
-                            )
-                            Text(
-                                text = homeItems[i].title,
-                                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.W500),
-                                color = if (homeItems[i].isChecked) MaterialTheme.colorScheme.onPrimaryContainer
-                                else MaterialTheme.colorScheme.onSecondaryContainer,
-                                modifier = Modifier.weight(2f)
-                            )
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f)
-                            ) {
-                                if (homeItems[i].showSwitch) {
-                                    Text(
-                                        text = if (homeItems[i].isChecked) stringResource(id = R.string.android_on)
-                                        else stringResource(id = R.string.android_off),
-                                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.W600),
-                                        color = if (homeItems[i].isChecked) MaterialTheme.colorScheme.onPrimaryContainer
-                                        else MaterialTheme.colorScheme.onSecondaryContainer
-                                    )
-                                    KSwitch(
-                                        checked = homeItems[i].isChecked,
-                                        modifier = Modifier.rotate(-90f),
-                                        onClick = {
-                                            homeItems[i].onCheckedChange(!homeItems[i].isChecked)
-                                            onValueUpdate(i)
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    FeatureCard(
+                        modifier = Modifier.size(featureSize),
+                        item = homeItems[i],
+                        backgroundColor = backgroundColor,
+                        contentColor = contentColor,
+                        iconColor = iconColor,
+                        onValueUpdate = { onValueUpdate(i) }
+                    )
                 }
+            } else {
+                FeatureCard(
+                    modifier = Modifier.size(featureSize),
+                    item = homeItems[i],
+                    backgroundColor = backgroundColor,
+                    contentColor = contentColor,
+                    iconColor = iconColor,
+                    onValueUpdate = { onValueUpdate(i) }
+                )
             }
-            else {
-                Box(modifier = Modifier
-                    .size(featureSize)
-                    .padding(9.dp)
-                    .aspectRatio(1f)
-                    .clip(homeItems[i].shape)
-                    .background(
-                        brush = if (homeItems[i].isChecked) {
-                            Brush.linearGradient(
-                                listOf(
-                                    MaterialTheme.colorScheme.primaryContainer,
-                                    MaterialTheme.colorScheme.primaryContainer.copy(0.8f),
-                                    MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
-                                )
-                            )
-                        } else {
-                            brush
+        }
+    }
+}
+
+@Composable
+private fun FeatureCard(
+    modifier: Modifier = Modifier,
+    item: HomeFeature,
+    backgroundColor: androidx.compose.ui.graphics.Color,
+    contentColor: androidx.compose.ui.graphics.Color,
+    iconColor: androidx.compose.ui.graphics.Color,
+    onValueUpdate: () -> Unit
+) {
+    Surface(
+        modifier = modifier
+            .padding(8.dp)
+            .aspectRatio(1f)
+            .clip(item.shape)
+            .clickable { item.route?.let { item.onClick(it) } },
+        shape = item.shape,
+        color = backgroundColor,
+        shadowElevation = if (item.isChecked) 6.dp else 2.dp,
+        tonalElevation = if (item.isChecked) 4.dp else 1.dp
+    ) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Icon(
+                tint = iconColor,
+                painter = painterResource(id = item.icon),
+                contentDescription = item.title,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(4.dp)
+            )
+            Text(
+                text = item.title,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = contentColor,
+                modifier = Modifier.weight(1.5f)
+            )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                if (item.showSwitch) {
+                    Text(
+                        text = if (item.isChecked) 
+                            stringResource(id = R.string.android_on)
+                        else 
+                            stringResource(id = R.string.android_off),
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        color = contentColor.copy(alpha = 0.8f)
+                    )
+                    KSwitch(
+                        checked = item.isChecked,
+                        modifier = Modifier.rotate(-90f),
+                        onClick = {
+                            item.onCheckedChange(!item.isChecked)
+                            onValueUpdate()
                         }
                     )
-                    .clickable { homeItems[i].route?.let { homeItems[i].onClick(it) } }) {
-                    Column(
-                        Modifier
-                            .fillMaxSize()
-                            .padding(15.dp, 15.dp, 2.dp, 15.dp)
-                    ) {
-                        Icon(
-                            tint = if (homeItems[i].isChecked) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.secondary,
-                            painter = painterResource(id = homeItems[i].icon),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(5.dp, 0.dp)
-                        )
-                        Text(
-                            text = homeItems[i].title,
-                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.W500),
-                            color = if (homeItems[i].isChecked) MaterialTheme.colorScheme.onPrimaryContainer
-                            else MaterialTheme.colorScheme.onSecondaryContainer,
-                            modifier = Modifier.weight(2f)
-                        )
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                        ) {
-                            if (homeItems[i].showSwitch) {
-                                Text(
-                                    text = if (homeItems[i].isChecked) stringResource(id = R.string.android_on)
-                                    else stringResource(id = R.string.android_off),
-                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.W600),
-                                    color = if (homeItems[i].isChecked) MaterialTheme.colorScheme.onPrimaryContainer
-                                    else MaterialTheme.colorScheme.onSecondaryContainer
-                                )
-                                KSwitch(
-                                    checked = homeItems[i].isChecked,
-                                    modifier = Modifier.rotate(-90f),
-                                    onClick = {
-                                        homeItems[i].onCheckedChange(!homeItems[i].isChecked)
-                                        onValueUpdate(i)
-                                    }
-                                )
-                            }
-                        }
-                    }
                 }
             }
         }
