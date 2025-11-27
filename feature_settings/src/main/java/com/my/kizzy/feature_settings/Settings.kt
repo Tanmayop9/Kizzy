@@ -48,6 +48,7 @@ fun SettingsDrawer(
     navigateToAbout: () -> Unit,
     navigateToRpcSettings: () -> Unit,
     navigateToLogsScreen: () -> Unit,
+    navigateToAdvancedSettings: () -> Unit = {},
 ) {
     val uriHandler = LocalUriHandler.current
     Surface(
@@ -109,6 +110,14 @@ fun SettingsDrawer(
                         icon = Icons.Outlined.Settings
                     ) {
                         navigateToRpcSettings()
+                    }
+                }
+                item {
+                    SettingsItemCard(
+                        title = stringResource(id = R.string.advanced_features),
+                        icon = Icons.Outlined.Tune
+                    ) {
+                        navigateToAdvancedSettings()
                     }
                 }
                 item {

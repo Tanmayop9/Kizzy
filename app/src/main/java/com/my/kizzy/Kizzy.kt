@@ -50,6 +50,7 @@ import com.my.kizzy.feature_profile.ui.user.UserScreen
 import com.my.kizzy.feature_profile.ui.user.UserViewModel
 import com.my.kizzy.feature_rpc_base.AppUtils
 import com.my.kizzy.feature_rpc_base.services.KizzyTileService
+import com.my.kizzy.feature_settings.advanced.AdvancedSettings
 import com.my.kizzy.feature_settings.language.Language
 import com.my.kizzy.feature_settings.rpc_settings.RpcSettings
 import com.my.kizzy.feature_settings.style.Appearance
@@ -141,6 +142,9 @@ internal fun ComponentActivity.Kizzy(
                     },
                     navigateToLogsScreen = {
                         navController.navigate(Routes.LOGS_SCREEN)
+                    },
+                    navigateToAdvancedSettings = {
+                        navController.navigate(Routes.ADVANCED_SETTINGS)
                     }
                 )
             }
@@ -270,6 +274,12 @@ internal fun ComponentActivity.Kizzy(
 
             animatedComposable(Routes.VC_STAY) {
                 VCStayScreen(
+                    onBackPressed = { navController.popBackStack() }
+                )
+            }
+
+            animatedComposable(Routes.ADVANCED_SETTINGS) {
+                AdvancedSettings(
                     onBackPressed = { navController.popBackStack() }
                 )
             }

@@ -95,6 +95,7 @@ fun Home(
     navigateToAbout: () -> Unit,
     navigateToRpcSettings: () -> Unit,
     navigateToLogsScreen: () -> Unit,
+    navigateToAdvancedSettings: () -> Unit = {},
 ) {
     val ctx = LocalContext.current
     var timestamp by remember { mutableLongStateOf(System.currentTimeMillis()) }
@@ -137,7 +138,8 @@ fun Home(
                         navigateToLanguages = navigateToLanguages,
                         navigateToAbout = navigateToAbout,
                         navigateToRpcSettings = navigateToRpcSettings,
-                        navigateToLogsScreen = navigateToLogsScreen
+                        navigateToLogsScreen = navigateToLogsScreen,
+                        navigateToAdvancedSettings = navigateToAdvancedSettings
                     )
                 }
             }
@@ -329,9 +331,10 @@ fun HomeScreenPreview() {
         navigateToStyleAndAppearance = { },
         navigateToLanguages = { },
         navigateToAbout = { },
-        navigateToRpcSettings = { }) {
-
-    }
+        navigateToRpcSettings = { },
+        navigateToLogsScreen = { },
+        navigateToAdvancedSettings = { }
+    )
 }
 
 val fakeFeatures = listOf(
