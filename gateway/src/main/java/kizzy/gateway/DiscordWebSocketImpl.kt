@@ -243,12 +243,13 @@ open class DiscordWebSocketImpl(
             delay(waitTime)
         }
         
-        lastPresenceUpdateTime = System.currentTimeMillis()
         logger.i("Gateway","Sending $PRESENCE_UPDATE")
         send(
             op = PRESENCE_UPDATE,
             d = presence
         )
+        // Update timestamp after successful send to ensure accurate rate limiting
+        lastPresenceUpdateTime = System.currentTimeMillis()
     }
 
 }

@@ -38,6 +38,10 @@ class AppActivityDetector @Inject constructor(
         const val YOUTUBE_KIDS_PACKAGE = "com.google.android.apps.youtube.kids"
         const val YOUTUBE_TV_PACKAGE = "com.google.android.youtube.tv"
 
+        // TikTok package names
+        const val TIKTOK_PACKAGE = "com.zhiliaoapp.musically"
+        const val TIKTOK_LITE_PACKAGE = "com.ss.android.ugc.trill"
+
         // Net Mirror package name (common mirror apps)
         const val NET_MIRROR_PACKAGE = "com.nicnet.netmirror"
 
@@ -120,6 +124,28 @@ class AppActivityDetector @Inject constructor(
                 ActivityState("Watching Recordings", "Watching recorded content")
             )
         ),
+        TIKTOK_PACKAGE to AppConfig(
+            appName = "TikTok",
+            defaultActivity = "Browsing TikTok",
+            activityType = ACTIVITY_WATCHING,
+            activities = listOf(
+                ActivityState("Watching Videos", "Scrolling For You page"),
+                ActivityState("Exploring Content", "Discovering creators"),
+                ActivityState("Watching LIVE", "Watching live stream"),
+                ActivityState("Browsing Following", "Checking updates"),
+                ActivityState("Creating Content", "Making videos")
+            )
+        ),
+        TIKTOK_LITE_PACKAGE to AppConfig(
+            appName = "TikTok Lite",
+            defaultActivity = "Browsing TikTok",
+            activityType = ACTIVITY_WATCHING,
+            activities = listOf(
+                ActivityState("Watching Videos", "Scrolling For You page"),
+                ActivityState("Exploring Content", "Discovering creators"),
+                ActivityState("Browsing Following", "Checking updates")
+            )
+        ),
         NET_MIRROR_PACKAGE to AppConfig(
             appName = "Net Mirror",
             defaultActivity = "Screen Mirroring",
@@ -156,14 +182,19 @@ class AppActivityDetector @Inject constructor(
     )
 
     /**
-     * Get enhanced activity information for the given package
+     * Get enhanced activity information for the given package.
+     * Randomly selects an activity from the configured activities for variety.
      */
     fun getEnhancedActivity(packageName: String, appName: String): CommonRpc {
         val config = appActivityConfig[packageName]
 
         return if (config != null) {
-            // Use the default activity for the app
-            val activity = config.activities.firstOrNull() ?: ActivityState(config.defaultActivity, null)
+            // Randomly select an activity for more dynamic presence
+            val activity = if (config.activities.isNotEmpty()) {
+                config.activities.random()
+            } else {
+                ActivityState(config.defaultActivity, null)
+            }
 
             CommonRpc(
                 name = config.appName,
