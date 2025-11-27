@@ -325,12 +325,18 @@
     <string name="advanced_features">Advanced Features</string>
     <string name="developer_options">Developer Options</string>
     <string name="debug_mode">Debug Mode</string>
+    <string name="debug_mode_desc">Enable verbose logging</string>
     <string name="export_logs">Export Logs</string>
     <string name="import_config">Import Config</string>
     <string name="export_config">Export Config</string>
     <string name="backup_restore">Backup &amp; Restore</string>
     <string name="create_backup">Create Backup</string>
     <string name="restore_backup">Restore Backup</string>
+    <string name="power_performance">Power &amp; Performance</string>
+    <string name="privacy">Privacy</string>
+    <string name="automation">Automation</string>
+    <string name="minutes">minutes</string>
+    <string name="history_cleared">History cleared</string>
 
     <!-- Widgets -->
     <string name="widget_settings">Widget Settings</string>

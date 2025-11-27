@@ -137,7 +137,7 @@ fun AdvancedSettings(onBackPressed: () -> Boolean) {
             // Power & Performance Section
             item {
                 Spacer(modifier = Modifier.height(8.dp))
-                Subtitle(text = "Power & Performance")
+                Subtitle(text = stringResource(R.string.power_performance))
             }
             
             item {
@@ -167,7 +167,7 @@ fun AdvancedSettings(onBackPressed: () -> Boolean) {
             // Privacy Section
             item {
                 Spacer(modifier = Modifier.height(8.dp))
-                Subtitle(text = "Privacy")
+                Subtitle(text = stringResource(R.string.privacy))
             }
             
             item {
@@ -188,7 +188,7 @@ fun AdvancedSettings(onBackPressed: () -> Boolean) {
             // Automation Section
             item {
                 Spacer(modifier = Modifier.height(8.dp))
-                Subtitle(text = "Automation")
+                Subtitle(text = stringResource(R.string.automation))
             }
             
             item {
@@ -261,7 +261,7 @@ fun AdvancedSettings(onBackPressed: () -> Boolean) {
                     icon = Icons.Default.History
                 ) {
                     Prefs.clearRpcHistory()
-                    Toast.makeText(context, "History cleared", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(R.string.history_cleared), Toast.LENGTH_SHORT).show()
                 }
             }
             
@@ -274,7 +274,7 @@ fun AdvancedSettings(onBackPressed: () -> Boolean) {
             item {
                 SettingItem(
                     title = stringResource(id = R.string.debug_mode),
-                    description = "Enable verbose logging",
+                    description = stringResource(id = R.string.debug_mode_desc),
                     icon = Icons.Default.Code
                 ) {
                     Toast.makeText(context, context.getString(R.string.coming_soon_feature), Toast.LENGTH_SHORT).show()
@@ -318,6 +318,7 @@ fun AdvancedSettings(onBackPressed: () -> Boolean) {
         
         // Rotation interval dialog
         if (showRotationIntervalDialog) {
+            val minutesText = stringResource(R.string.minutes)
             AlertDialog(
                 onDismissRequest = { showRotationIntervalDialog = false },
                 confirmButton = {},
@@ -327,7 +328,7 @@ fun AdvancedSettings(onBackPressed: () -> Boolean) {
                         val intervals = listOf(5, 10, 15, 30, 60, 120)
                         intervals.forEach { interval ->
                             SingleChoiceItem(
-                                text = "$interval minutes",
+                                text = "$interval $minutesText",
                                 selected = rotationInterval == interval
                             ) {
                                 rotationInterval = interval
