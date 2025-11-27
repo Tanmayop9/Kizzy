@@ -24,6 +24,7 @@ import com.my.kizzy.feature_rpc_base.services.AppDetectionService
 import com.my.kizzy.feature_rpc_base.services.CustomRpcService
 import com.my.kizzy.feature_rpc_base.services.ExperimentalRpc
 import com.my.kizzy.feature_rpc_base.services.MediaRpcService
+import com.my.kizzy.feature_rpc_base.services.VCStayService
 import com.my.kizzy.navigation.Routes
 import com.my.kizzy.preference.Prefs
 import com.my.kizzy.resources.R
@@ -51,6 +52,7 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, CustomRpcService::class.java))
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
                     ctx.stopService(Intent(ctx, MediaRpcService::class.java))
+                    ctx.stopService(Intent(ctx, VCStayService::class.java))
                     ctx.startService(Intent(ctx, AppDetectionService::class.java))
                 } else
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
@@ -72,6 +74,7 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, CustomRpcService::class.java))
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
+                    ctx.stopService(Intent(ctx, VCStayService::class.java))
                     ctx.startService(Intent(ctx, MediaRpcService::class.java))
                 } else
                     ctx.stopService(Intent(ctx, MediaRpcService::class.java))
@@ -97,6 +100,7 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, MediaRpcService::class.java))
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
+                    ctx.stopService(Intent(ctx, VCStayService::class.java))
                     ctx.startService(intent)
                 } else
                     ctx.stopService(Intent(ctx, CustomRpcService::class.java))
@@ -123,6 +127,7 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, MediaRpcService::class.java))
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
+                    ctx.stopService(Intent(ctx, VCStayService::class.java))
                     ctx.startService(intent)
                 } else
                     ctx.stopService(Intent(ctx, CustomRpcService::class.java))
@@ -143,6 +148,7 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, MediaRpcService::class.java))
                     ctx.stopService(Intent(ctx, CustomRpcService::class.java))
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
+                    ctx.stopService(Intent(ctx, VCStayService::class.java))
                     ctx.startService(Intent(ctx, ExperimentalRpc::class.java))
                 } else
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
@@ -151,6 +157,39 @@ fun homeFeaturesProvider(
             showSwitch = hasUsageAccess.value && hasNotificationAccess.value && userVerified,
             tooltipText = stringResource(id = R.string.main_experimentalRpc_details),
             featureDocsLink = ToolTipContent.EXPERIMENTAL_RPC_DOCS_LINK
+        ),
+        HomeFeature(
+            title = stringResource(id = R.string.main_vcStay),
+            icon = R.drawable.ic_vc_stay,
+            route = Routes.VC_STAY,
+            onClick = { navigateTo(it) },
+            isChecked = AppUtils.vcStayRunning(),
+            onCheckedChange = {
+                if (it) {
+                    val guildId = Prefs[Prefs.LAST_VC_GUILD_ID, ""]
+                    val channelId = Prefs[Prefs.LAST_VC_CHANNEL_ID, ""]
+                    if (guildId.isNotEmpty() && channelId.isNotEmpty()) {
+                        ctx.stopService(Intent(ctx, MediaRpcService::class.java))
+                        ctx.stopService(Intent(ctx, CustomRpcService::class.java))
+                        ctx.stopService(Intent(ctx, AppDetectionService::class.java))
+                        ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
+                        val intent = Intent(ctx, VCStayService::class.java).apply {
+                            putExtra(VCStayService.EXTRA_GUILD_ID, guildId)
+                            putExtra(VCStayService.EXTRA_CHANNEL_ID, channelId)
+                            putExtra(VCStayService.EXTRA_SELF_MUTE, Prefs[Prefs.LAST_VC_SELF_MUTE, true])
+                            putExtra(VCStayService.EXTRA_SELF_DEAF, Prefs[Prefs.LAST_VC_SELF_DEAF, true])
+                        }
+                        ctx.startService(intent)
+                    }
+                } else
+                    ctx.stopService(Intent(ctx, VCStayService::class.java))
+            },
+            shape = RoundedCornerShape(44.dp, 20.dp, 44.dp, 20.dp),
+            showSwitch = Prefs[Prefs.LAST_VC_GUILD_ID, ""].isNotEmpty() && 
+                         Prefs[Prefs.LAST_VC_CHANNEL_ID, ""].isNotEmpty() && 
+                         userVerified,
+            tooltipText = stringResource(id = R.string.main_vcStay_details),
+            featureDocsLink = ToolTipContent.VC_STAY_DOCS_LINK
         ),
         HomeFeature(
             title = stringResource(id = R.string.main_comingSoon),

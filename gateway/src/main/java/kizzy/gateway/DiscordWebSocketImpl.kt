@@ -10,6 +10,7 @@ import kizzy.gateway.entities.Identify.Companion.toIdentifyPayload
 import kizzy.gateway.entities.Payload
 import kizzy.gateway.entities.Ready
 import kizzy.gateway.entities.Resume
+import kizzy.gateway.entities.VoiceState
 import kizzy.gateway.entities.op.OpCode
 import kizzy.gateway.entities.op.OpCode.*
 import kizzy.gateway.entities.presence.Presence
@@ -250,6 +251,47 @@ open class DiscordWebSocketImpl(
         )
         // Update timestamp after successful send to ensure accurate rate limiting
         lastPresenceUpdateTime = System.currentTimeMillis()
+    }
+
+    override suspend fun joinVoiceChannel(
+        guildId: String,
+        channelId: String,
+        selfMute: Boolean,
+        selfDeaf: Boolean
+    ) {
+        // Wait for socket to be connected
+        while (!isSocketConnectedToAccount()) {
+            delay(10.milliseconds)
+        }
+        
+        logger.i("Gateway", "Joining voice channel: $channelId in guild: $guildId")
+        send(
+            op = VOICE_STATE,
+            d = VoiceState(
+                guildId = guildId,
+                channelId = channelId,
+                selfMute = selfMute,
+                selfDeaf = selfDeaf
+            )
+        )
+    }
+
+    override suspend fun leaveVoiceChannel(guildId: String) {
+        // Wait for socket to be connected
+        while (!isSocketConnectedToAccount()) {
+            delay(10.milliseconds)
+        }
+        
+        logger.i("Gateway", "Leaving voice channel in guild: $guildId")
+        send(
+            op = VOICE_STATE,
+            d = VoiceState(
+                guildId = guildId,
+                channelId = null,  // null channel_id means leave
+                selfMute = true,
+                selfDeaf = true
+            )
+        )
     }
 
 }

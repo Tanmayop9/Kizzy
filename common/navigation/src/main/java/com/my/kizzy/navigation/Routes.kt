@@ -30,11 +30,13 @@ class Routes {
         const val CONSOLE_RPC = "console_rpc"
         const val EXPERIMENTAL_RPC = "experimental_rpc"
         const val EXPERIMENTAL_RPC_APPS = "experimental_rpc_apps"
+        const val VC_STAY = "vc_stay"
 
         /* Settings Screens */
         const val LANGUAGES = "languages"
         const val STYLE_AND_APPEARANCE = "style_and_appearance"
         const val RPC_SETTINGS = "rpc_settings"
+        const val ADVANCED_SETTINGS = "advanced_settings"
 
         /* Display Screen */
         const val DARK_THEME ="dark_theme_screen"
@@ -45,5 +47,11 @@ class Routes {
         /* About Screen */
         const val ABOUT = "about"
         const val CREDITS = "credits"
+
+        /* Advanced Features */
+        const val RPC_HISTORY = "rpc_history"
+        const val FAVORITES = "favorites"
+        const val SCHEDULED_RPC = "scheduled_rpc"
+        const val STATISTICS = "statistics"
     }
 }

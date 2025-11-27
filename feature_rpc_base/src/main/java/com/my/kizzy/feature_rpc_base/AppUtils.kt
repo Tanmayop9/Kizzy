@@ -20,6 +20,7 @@ import com.my.kizzy.feature_rpc_base.services.AppDetectionService
 import com.my.kizzy.feature_rpc_base.services.CustomRpcService
 import com.my.kizzy.feature_rpc_base.services.ExperimentalRpc
 import com.my.kizzy.feature_rpc_base.services.MediaRpcService
+import com.my.kizzy.feature_rpc_base.services.VCStayService
 import javax.inject.Singleton
 
 @Singleton
@@ -43,6 +44,16 @@ object AppUtils {
     fun experimentalRpcRunning(): Boolean {
         return checkForRunningService<ExperimentalRpc>()
     }
+
+    fun vcStayRunning(): Boolean {
+        return checkForRunningService<VCStayService>()
+    }
+
+    fun anyServiceRunning(): Boolean {
+        return appDetectionRunning() || mediaRpcRunning() || customRpcRunning() || 
+               experimentalRpcRunning() || vcStayRunning()
+    }
+
     private inline fun <reified T : Any> checkForRunningService(): Boolean {
         for (runningServiceInfo in activityManager.getRunningServices(
             Int.MAX_VALUE
