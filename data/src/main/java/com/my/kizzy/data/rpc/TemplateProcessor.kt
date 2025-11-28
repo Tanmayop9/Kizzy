@@ -32,12 +32,6 @@ class TemplateKeys {
         const val APP_ACTIVITY = "{{app_activity}}"
         const val APP_STATE = "{{app_state}}"
         
-        // Prefix templates for better formatting
-        const val LISTENING_TO = "Listening to {{app_name}}"
-        const val WATCHING = "Watching {{app_name}}"
-        const val PLAYING = "Playing {{app_name}}"
-        const val BROWSING = "Browsing {{app_name}}"
-        
         // All available template keys for UI display
         val ALL_KEYS = listOf(
             MEDIA_TITLE,
