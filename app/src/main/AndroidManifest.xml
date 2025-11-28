@@ -137,6 +137,14 @@
                 android:value="Discord 24/7 Voice Channel Stay" />
         </service>
 
+        <service android:name="com.my.kizzy.feature_rpc_base.services.StreamOnVCService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Discord Stream on Voice Channel" />
+        </service>
+
         <service
             android:name=".feature_rpc_base.services.KizzyTileService"
             android:icon="@drawable/ic_tile_play"

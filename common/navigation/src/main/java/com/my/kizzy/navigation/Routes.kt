@@ -31,6 +31,7 @@ class Routes {
         const val EXPERIMENTAL_RPC = "experimental_rpc"
         const val EXPERIMENTAL_RPC_APPS = "experimental_rpc_apps"
         const val VC_STAY = "vc_stay"
+        const val STREAM_ON_VC = "stream_on_vc"
 
         /* Settings Screens */
         const val LANGUAGES = "languages"

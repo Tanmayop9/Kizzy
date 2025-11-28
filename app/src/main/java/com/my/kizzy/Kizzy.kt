@@ -56,6 +56,7 @@ import com.my.kizzy.feature_settings.rpc_settings.RpcSettings
 import com.my.kizzy.feature_settings.style.Appearance
 import com.my.kizzy.feature_settings.style.DarkThemePreferences
 import com.my.kizzy.feature_startup.StartUp
+import com.my.kizzy.feature_vc_stay.StreamOnVCScreen
 import com.my.kizzy.feature_vc_stay.VCStayScreen
 import com.my.kizzy.navigation.Routes
 import com.my.kizzy.navigation.animatedComposable
@@ -274,6 +275,12 @@ internal fun ComponentActivity.Kizzy(
 
             animatedComposable(Routes.VC_STAY) {
                 VCStayScreen(
+                    onBackPressed = { navController.popBackStack() }
+                )
+            }
+
+            animatedComposable(Routes.STREAM_ON_VC) {
+                StreamOnVCScreen(
                     onBackPressed = { navController.popBackStack() }
                 )
             }
