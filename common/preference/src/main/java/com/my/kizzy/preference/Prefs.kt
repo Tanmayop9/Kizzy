@@ -190,13 +190,11 @@ object Prefs {
     const val CUSTOM_ACTIVITY_APPLICATION_ID = "custom_activity_application_id_"
 
     /**
-     * The list of media apps that are enabled by default. See [isMediaAppEnabled] and
-     * [saveMediaAppToPrefs] for more information.
-     */
-    /**
      * Comprehensive list of media apps for rich presence support.
      * Includes music streaming, video streaming, social media with video,
      * education platforms, and more.
+     * 
+     * See [isMediaAppEnabled] and [saveMediaAppToPrefs] for more information.
      */
     val predefinedMediaApps: List<String> = listOf(
         // ==================== MUSIC STREAMING APPS ====================

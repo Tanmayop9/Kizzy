@@ -71,7 +71,7 @@ class TemplateProcessor(
 
         var result = template
 
-        // Process media metadata if available
+        // Process media metadata if available (takes priority over app info)
         if (mediaMetadata != null && mediaPlayerAppName != null && mediaPlayerPackageName != null) {
             result = result
                 .replace(
@@ -95,10 +95,8 @@ class TemplateProcessor(
                     mediaMetadata.getString(MediaMetadata.METADATA_KEY_ALBUM_ARTIST) ?: ""
                 )
                 .replace(TemplateKeys.APP_NAME, mediaPlayerAppName)
-        }
-        
-        // Process app activity info if available
-        if (detectedAppInfo != null) {
+        } else if (detectedAppInfo != null) {
+            // Process app activity info if no media context
             result = result
                 .replace(TemplateKeys.APP_NAME, detectedAppInfo.name)
                 .replace(TemplateKeys.APP_ACTIVITY, detectedAppInfo.details ?: "")
