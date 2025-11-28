@@ -4,7 +4,7 @@
  *  *  * Copyright (C) 2022
  *  *  * About.kt is part of Kizzy
  *  *  *  and can not be copied and/or distributed without the express
- *  *  * permission of yzziK(Vaibhav)
+ *  *  * permission of Tanmay
  *  *  *****************************************************************
  *
  *
@@ -32,10 +32,10 @@ import com.my.kizzy.feature_about.BuildConfig
 
 
 
-const val github_Repository = "https://github.com/dead8309/Kizzy"
+const val github_Repository = "https://github.com/Tanmayop9/Kizzy"
 const val github_Release = "$github_Repository/releases"
 const val github_Issues = "$github_Repository/issues/new"
-const val github_privacy_policy = "$github_Repository/blob//master/TERMS_OF_SERVICE.md"
+const val github_privacy_policy = "$github_Repository/blob/master/TERMS_OF_SERVICE.md"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
