@@ -23,6 +23,8 @@
     <string name="preview_rpc">Preview RPC</string>
     <string name="select_a_config">Select a config</string>
     <string name="login_with_discord">Login With Discord</string>
+    <string name="download_apk">Download APK</string>
+    <string name="download_apk_desc">Click to download the latest version of the app</string>
     <string name="github_readme">README</string>
     <string name="github_readme_desc">Check the Github repository</string>
     <string name="github_latest_release">"Latest release "</string>

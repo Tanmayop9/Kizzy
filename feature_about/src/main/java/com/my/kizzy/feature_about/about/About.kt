@@ -34,6 +34,7 @@ import com.my.kizzy.feature_about.BuildConfig
 
 const val github_Repository = "https://github.com/Tanmayop9/Kizzy"
 const val github_Release = "$github_Repository/releases"
+const val github_Latest_Release = "$github_Repository/releases/latest"
 const val github_Issues = "$github_Repository/issues/new"
 const val github_privacy_policy = "$github_Repository/blob/master/TERMS_OF_SERVICE.md"
 
@@ -64,6 +65,15 @@ fun About(
     ) {
         LazyColumn(modifier = Modifier.padding(it)){
 
+            item {
+                PreferencesHint(
+                    title = stringResource(id = R.string.download_apk),
+                    description = stringResource(id = R.string.download_apk_desc),
+                    icon = Icons.Outlined.Download
+                ) {
+                    openUrl(github_Latest_Release)
+                }
+            }
             item {
                 PreferencesHint(
                     title = stringResource(id = R.string.privacy_policy),
