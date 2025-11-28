@@ -240,6 +240,22 @@
     <string name="vc_stay_how_to_get_ids">How to get Server and Channel IDs</string>
     <string name="vc_stay_ids_instructions">Enable Developer Mode in Discord Settings → Advanced, then right-click on the server/channel and select \"Copy ID\"</string>
 
+    <!-- Stream on VC Feature -->
+    <string name="main_streamOnVc">Stream on VC</string>
+    <string name="main_streamOnVc_details">Go live in a Discord voice channel by streaming a YouTube video. Enter your server and channel IDs along with a YouTube URL to start streaming.</string>
+    <string name="stream_vc_running">Stream on VC Active</string>
+    <string name="stream_vc_streaming">Streaming in voice channel</string>
+    <string name="stream_vc_guild_id">Server (Guild) ID</string>
+    <string name="stream_vc_channel_id">Voice Channel ID</string>
+    <string name="stream_vc_youtube_url">YouTube URL</string>
+    <string name="stream_vc_youtube_url_hint">https://youtube.com/watch?v=...</string>
+    <string name="stream_vc_stream_name">Stream Name</string>
+    <string name="stream_vc_stream_name_hint">What are you streaming?</string>
+    <string name="enable_stream_vc">Go Live</string>
+    <string name="stream_vc_how_to">How to stream on VC</string>
+    <string name="stream_vc_instructions">1. Enable Developer Mode in Discord Settings → Advanced\n2. Right-click on the server/channel and select \"Copy ID\"\n3. Enter a valid YouTube URL (https://youtube.com/...)\n4. Click \"Go Live\" to start streaming</string>
+    <string name="stream_vc_invalid_url">Please enter a valid YouTube URL</string>
+
     <!-- Advanced Features -->
     <string name="auto_start_on_boot">Auto-Start on Boot</string>
     <string name="auto_start_on_boot_desc">Automatically start RPC when your device boots up</string>

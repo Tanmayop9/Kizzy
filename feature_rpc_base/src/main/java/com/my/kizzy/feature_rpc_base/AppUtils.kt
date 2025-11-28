@@ -20,6 +20,7 @@ import com.my.kizzy.feature_rpc_base.services.AppDetectionService
 import com.my.kizzy.feature_rpc_base.services.CustomRpcService
 import com.my.kizzy.feature_rpc_base.services.ExperimentalRpc
 import com.my.kizzy.feature_rpc_base.services.MediaRpcService
+import com.my.kizzy.feature_rpc_base.services.StreamOnVCService
 import com.my.kizzy.feature_rpc_base.services.VCStayService
 import javax.inject.Singleton
 
@@ -49,9 +50,13 @@ object AppUtils {
         return checkForRunningService<VCStayService>()
     }
 
+    fun streamOnVCRunning(): Boolean {
+        return checkForRunningService<StreamOnVCService>()
+    }
+
     fun anyServiceRunning(): Boolean {
         return appDetectionRunning() || mediaRpcRunning() || customRpcRunning() || 
-               experimentalRpcRunning() || vcStayRunning()
+               experimentalRpcRunning() || vcStayRunning() || streamOnVCRunning()
     }
 
     private inline fun <reified T : Any> checkForRunningService(): Boolean {

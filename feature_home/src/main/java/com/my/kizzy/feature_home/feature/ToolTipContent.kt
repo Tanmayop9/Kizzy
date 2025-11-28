@@ -20,10 +20,12 @@ object ToolTipContent {
     const val CUSTOM_RPC_DOCS = "Kizzy allows you to create your own fully customisable rich presence for Discord."
     const val EXPERIMENTAL_RPC_DOCS = "Experimental RPC is a feature in Kizzy that constantly switches between Apps RPC and Media RPC."
     const val VC_STAY_DOCS = "Stay connected to a Discord voice channel 24/7 without keeping the app open. Perfect for music bots or just hanging out."
+    const val STREAM_ON_VC_DOCS = "Go live in a Discord voice channel by streaming a YouTube video. Enter your server and channel IDs along with a YouTube URL to start streaming."
     const val APP_DETECTION_DOCS_LINK = "$BASE_DOCS_URL/app"
     const val MEDIA_RPC_DOCS_LINK = "$BASE_DOCS_URL/media"
     const val CONSOLE_RPC_DOCS_LINK = "$BASE_DOCS_URL/console"
     const val CUSTOM_RPC_DOCS_LINK = "$BASE_DOCS_URL/custom"
     const val EXPERIMENTAL_RPC_DOCS_LINK = "$BASE_DOCS_URL/experimental"
     const val VC_STAY_DOCS_LINK = "$BASE_DOCS_URL/vc-stay"
+    const val STREAM_ON_VC_DOCS_LINK = "$BASE_DOCS_URL/stream-on-vc"
 }

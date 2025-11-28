@@ -16,4 +16,5 @@ dependencies {
     implementation (libs.activity.compose)
     implementation (libs.kotlinx.serialization.json)
     implementation (libs.material.icons.extended)
+    implementation (libs.androidx.webkit)
 }

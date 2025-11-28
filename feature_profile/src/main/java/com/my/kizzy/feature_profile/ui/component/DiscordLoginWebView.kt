@@ -13,14 +13,18 @@
 package com.my.kizzy.feature_profile.ui.component
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JsResult
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.webkit.WebSettings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.webkit.WebViewFeature
+import androidx.webkit.WebSettingsCompat
 
 const val JS_SNIPPET =
     "javascript:(function()%7Bvar%20i%3Ddocument.createElement('iframe')%3Bdocument.body.appendChild(i)%3Balert(i.contentWindow.localStorage.token.slice(1,-1))%7D)()"
@@ -51,9 +55,29 @@ internal fun DiscordLoginWebView(
                     return false
                 }
             }
+            
+            // Basic settings for JavaScript and DOM storage
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
-
+            
+            // Enable database storage for WebAuthn
+            settings.databaseEnabled = true
+            
+            // Set cache mode for better compatibility
+            settings.cacheMode = WebSettings.LOAD_DEFAULT
+            
+            // Enable WebAuthn/Passkey support using AndroidX WebKit
+            // This allows users to authenticate using passkeys on Discord
+            // Note: If WEB_AUTHENTICATION feature is not supported (older WebView versions),
+            // the user will need to fall back to traditional password login.
+            // The feature requires Android WebView 116+ to work properly.
+            if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_AUTHENTICATION)) {
+                WebSettingsCompat.setWebAuthenticationSupport(
+                    settings,
+                    WebSettingsCompat.WEB_AUTHENTICATION_SUPPORT_FOR_APP
+                )
+            }
+            
             /*
                 Motorola users are not able to sign into discord in a WebView:
                 This issue is the fault of how Motorola phones (on every model) form the WebKit UA,
@@ -61,7 +85,7 @@ internal fun DiscordLoginWebView(
 
                 see https://github.com/dead8309/Kizzy/issues/345#issuecomment-2699729072
              */
-            if (android.os.Build.MANUFACTURER.equals(MOTOROLA, ignoreCase = true)) {
+            if (Build.MANUFACTURER.equals(MOTOROLA, ignoreCase = true)) {
                 settings.userAgentString = SAMSUNG_USER_AGENT
             }
             webChromeClient = object : WebChromeClient() {

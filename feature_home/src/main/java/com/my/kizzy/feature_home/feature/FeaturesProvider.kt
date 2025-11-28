@@ -24,6 +24,7 @@ import com.my.kizzy.feature_rpc_base.services.AppDetectionService
 import com.my.kizzy.feature_rpc_base.services.CustomRpcService
 import com.my.kizzy.feature_rpc_base.services.ExperimentalRpc
 import com.my.kizzy.feature_rpc_base.services.MediaRpcService
+import com.my.kizzy.feature_rpc_base.services.StreamOnVCService
 import com.my.kizzy.feature_rpc_base.services.VCStayService
 import com.my.kizzy.navigation.Routes
 import com.my.kizzy.preference.Prefs
@@ -53,6 +54,7 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
                     ctx.stopService(Intent(ctx, MediaRpcService::class.java))
                     ctx.stopService(Intent(ctx, VCStayService::class.java))
+                    ctx.stopService(Intent(ctx, StreamOnVCService::class.java))
                     ctx.startService(Intent(ctx, AppDetectionService::class.java))
                 } else
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
@@ -75,6 +77,7 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
                     ctx.stopService(Intent(ctx, VCStayService::class.java))
+                    ctx.stopService(Intent(ctx, StreamOnVCService::class.java))
                     ctx.startService(Intent(ctx, MediaRpcService::class.java))
                 } else
                     ctx.stopService(Intent(ctx, MediaRpcService::class.java))
@@ -101,6 +104,7 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
                     ctx.stopService(Intent(ctx, VCStayService::class.java))
+                    ctx.stopService(Intent(ctx, StreamOnVCService::class.java))
                     ctx.startService(intent)
                 } else
                     ctx.stopService(Intent(ctx, CustomRpcService::class.java))
@@ -128,6 +132,7 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
                     ctx.stopService(Intent(ctx, VCStayService::class.java))
+                    ctx.stopService(Intent(ctx, StreamOnVCService::class.java))
                     ctx.startService(intent)
                 } else
                     ctx.stopService(Intent(ctx, CustomRpcService::class.java))
@@ -149,6 +154,7 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, CustomRpcService::class.java))
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
                     ctx.stopService(Intent(ctx, VCStayService::class.java))
+                    ctx.stopService(Intent(ctx, StreamOnVCService::class.java))
                     ctx.startService(Intent(ctx, ExperimentalRpc::class.java))
                 } else
                     ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
@@ -173,6 +179,7 @@ fun homeFeaturesProvider(
                         ctx.stopService(Intent(ctx, CustomRpcService::class.java))
                         ctx.stopService(Intent(ctx, AppDetectionService::class.java))
                         ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
+                        ctx.stopService(Intent(ctx, StreamOnVCService::class.java))
                         val intent = Intent(ctx, VCStayService::class.java).apply {
                             putExtra(VCStayService.EXTRA_GUILD_ID, guildId)
                             putExtra(VCStayService.EXTRA_CHANNEL_ID, channelId)
@@ -190,6 +197,43 @@ fun homeFeaturesProvider(
                          userVerified,
             tooltipText = stringResource(id = R.string.main_vcStay_details),
             featureDocsLink = ToolTipContent.VC_STAY_DOCS_LINK
+        ),
+        HomeFeature(
+            title = stringResource(id = R.string.main_streamOnVc),
+            icon = R.drawable.ic_stream_vc,
+            route = Routes.STREAM_ON_VC,
+            onClick = { navigateTo(it) },
+            isChecked = AppUtils.streamOnVCRunning(),
+            onCheckedChange = {
+                if (it) {
+                    val guildId = Prefs[Prefs.STREAM_VC_GUILD_ID, ""]
+                    val channelId = Prefs[Prefs.STREAM_VC_CHANNEL_ID, ""]
+                    val youtubeUrl = Prefs[Prefs.STREAM_VC_YOUTUBE_URL, ""]
+                    val streamName = Prefs[Prefs.STREAM_VC_STREAM_NAME, "YouTube"]
+                    if (guildId.isNotEmpty() && channelId.isNotEmpty() && youtubeUrl.isNotEmpty()) {
+                        ctx.stopService(Intent(ctx, MediaRpcService::class.java))
+                        ctx.stopService(Intent(ctx, CustomRpcService::class.java))
+                        ctx.stopService(Intent(ctx, AppDetectionService::class.java))
+                        ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
+                        ctx.stopService(Intent(ctx, VCStayService::class.java))
+                        val intent = Intent(ctx, StreamOnVCService::class.java).apply {
+                            putExtra(StreamOnVCService.EXTRA_GUILD_ID, guildId)
+                            putExtra(StreamOnVCService.EXTRA_CHANNEL_ID, channelId)
+                            putExtra(StreamOnVCService.EXTRA_YOUTUBE_URL, youtubeUrl)
+                            putExtra(StreamOnVCService.EXTRA_STREAM_NAME, streamName)
+                        }
+                        ctx.startService(intent)
+                    }
+                } else
+                    ctx.stopService(Intent(ctx, StreamOnVCService::class.java))
+            },
+            shape = RoundedCornerShape(20.dp, 44.dp, 20.dp, 44.dp),
+            showSwitch = Prefs[Prefs.STREAM_VC_GUILD_ID, ""].isNotEmpty() && 
+                         Prefs[Prefs.STREAM_VC_CHANNEL_ID, ""].isNotEmpty() && 
+                         Prefs[Prefs.STREAM_VC_YOUTUBE_URL, ""].isNotEmpty() &&
+                         userVerified,
+            tooltipText = stringResource(id = R.string.main_streamOnVc_details),
+            featureDocsLink = ToolTipContent.STREAM_ON_VC_DOCS_LINK
         ),
         HomeFeature(
             title = stringResource(id = R.string.main_comingSoon),

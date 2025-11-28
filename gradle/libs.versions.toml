@@ -10,6 +10,7 @@ accompanist = "0.31.0-alpha"
 activity-compose = "1.9.3"
 android-svg = "1.4"
 androidx-material = "1.12.0"
+androidx-webkit = "1.12.1"
 app-compat = "1.7.0"
 blankj-utilcodex = "1.31.0"
 coil = "2.1.0"
@@ -40,6 +41,7 @@ core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-ktx" }
 app-compat = { module = "androidx.appcompat:appcompat", version.ref = "app-compat" }
 androidx-material = { module = "com.google.android.material:material", version.ref = "androidx-material" }
+androidx-webkit = { module = "androidx.webkit:webkit", version.ref = "androidx-webkit" }
 kotlinx-coroutine = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutine" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "compose-navigation" }

@@ -372,6 +372,12 @@ object Prefs {
     const val LAST_VC_SELF_DEAF = "last_vc_self_deaf"
     const val VC_STAY_AUTO_RECONNECT = "vc_stay_auto_reconnect"
 
+    // Stream on VC Preferences
+    const val STREAM_VC_GUILD_ID = "stream_vc_guild_id"
+    const val STREAM_VC_CHANNEL_ID = "stream_vc_channel_id"
+    const val STREAM_VC_YOUTUBE_URL = "stream_vc_youtube_url"
+    const val STREAM_VC_STREAM_NAME = "stream_vc_stream_name"
+
     // Advanced Features Preferences
     const val AUTO_START_RPC_ON_BOOT = "auto_start_rpc_on_boot"
     const val AUTO_START_RPC_TYPE = "auto_start_rpc_type"
