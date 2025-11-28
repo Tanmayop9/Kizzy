@@ -306,13 +306,8 @@ object Prefs {
         "com.duolingo",
         "com.brainly",
 
-        // ==================== GAMING APPS (that may have media content) ====================
-        "com.discord", // Already included in messaging but keeping for completeness
-        "tv.twitch.android.app", // Already included but relevant for gaming
-
         // ==================== PODCAST APPS ====================
         "com.google.android.apps.podcasts",
-        "com.spotify.music", // Already included but has podcasts
         "fm.castbox.audiobook.radio.podcast",
         "au.com.shiftyjelly.pocketcasts",
         "com.bambuna.podcastaddict",

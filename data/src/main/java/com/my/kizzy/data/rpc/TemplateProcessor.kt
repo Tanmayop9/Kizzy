@@ -26,8 +26,6 @@ class TemplateKeys {
         const val MEDIA_AUTHOR = "{{media_author}}"
         const val MEDIA_ALBUM = "{{media_album}}"
         const val MEDIA_ALBUM_ARTIST = "{{media_album_artist}}"
-        const val MEDIA_GENRE = "{{media_genre}}"
-        const val MEDIA_YEAR = "{{media_year}}"
         
         // App template keys
         const val APP_NAME = "{{app_name}}"
@@ -96,14 +94,6 @@ class TemplateProcessor(
                     TemplateKeys.MEDIA_ALBUM_ARTIST,
                     mediaMetadata.getString(MediaMetadata.METADATA_KEY_ALBUM_ARTIST) ?: ""
                 )
-                .replace(
-                    TemplateKeys.MEDIA_GENRE,
-                    mediaMetadata.getString(MediaMetadata.METADATA_KEY_GENRE) ?: ""
-                )
-                .replace(
-                    TemplateKeys.MEDIA_YEAR,
-                    mediaMetadata.getLong(MediaMetadata.METADATA_KEY_YEAR).takeIf { it > 0 }?.toString() ?: ""
-                )
                 .replace(TemplateKeys.APP_NAME, mediaPlayerAppName)
         }
         
@@ -123,6 +113,7 @@ class TemplateProcessor(
         // Trim and clean up extra spaces
         result = result.trim().replace(Regex("\\s+"), " ")
 
-        return result.takeIf { it.isNotBlank() }
+        // Return empty string if blank to maintain backwards compatibility
+        return if (result.isBlank()) "" else result
     }
 }
