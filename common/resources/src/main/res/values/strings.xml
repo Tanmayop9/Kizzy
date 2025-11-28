@@ -210,13 +210,15 @@
     <string name="app_preferences_desc">Select which apps are enabled for Experimental RPC</string>
     <string name="completion_media_title">Song/Video Title</string>
     <string name="completion_media_artist">Main Artist</string>
+    <string name="completion_media_author">Main Author</string>
+    <string name="completion_media_album">Album Name</string>
+    <string name="completion_media_album_artist">Album Artist</string>
     <string name="completion_app_name">Detected App Name</string>
     <string name="completion_app_activity">App Activity (e.g., Watching Reels)</string>
     <string name="completion_app_state">App State Details</string>
     <string name="show_cover_art">Show Cover Art</string>
     <string name="show_cover_art_desc">Display album cover art as large image</string>
     <string name="enable_experimental_rpc">Enable Experimental RPC</string>
-    <string name="completion_media_author">Main Author</string>
     <string name="imgur_client_id">Imgur Client ID</string>
     <string name="set_imgur_client_id">Set Imgur Client ID</string>
     <string name="set_imgur_client_id_desc">If images aren\'t showing using Imgur, you can try setting your own Client ID</string>

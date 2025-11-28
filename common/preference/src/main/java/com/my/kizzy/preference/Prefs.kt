@@ -193,10 +193,16 @@ object Prefs {
      * The list of media apps that are enabled by default. See [isMediaAppEnabled] and
      * [saveMediaAppToPrefs] for more information.
      */
+    /**
+     * Comprehensive list of media apps for rich presence support.
+     * Includes music streaming, video streaming, social media with video,
+     * education platforms, and more.
+     */
     val predefinedMediaApps: List<String> = listOf(
-        // music steaming apps
+        // ==================== MUSIC STREAMING APPS ====================
         "com.google.android.apps.youtube.music",
         "com.spotify.music",
+        "com.spotify.lite",
         "com.google.android.music",
         "com.amazon.mp3",
         "com.apple.android.music",
@@ -207,12 +213,21 @@ object Prefs {
         "com.rhapsody",
         "com.sonyericsson.music",
         "com.aspiro.tidal",
+        "com.jio.media.jiobeats", // JioSaavn
+        "com.gaana",
+        "com.bsbportal.music", // Wynk
+        "com.hungama.myplay.activity",
+        "com.spotify.stations",
 
-        // music player apps
+        // ==================== MUSIC PLAYER APPS ====================
         "com.sec.android.app.music",
         "com.tbig.playerpro",
+        "com.maxmpz.audioplayer", // Poweramp
+        "com.rhmsoft.pulsar",
+        "code.name.monkey.retromusic",
+        "com.tonapps.tonkeeper",
 
-        // video streaming apps
+        // ==================== VIDEO STREAMING APPS ====================
         "com.google.android.apps.youtube.kids",
         "com.google.android.apps.youtube.unplugged",
         "com.google.android.youtube.googletv",
@@ -221,26 +236,91 @@ object Prefs {
         "com.netflix.mediaclient",
         "com.kick.mobile",
         "tv.twitch.android.app",
+        "com.amazon.avod.thirdpartyclient", // Prime Video
+        "com.amazon.avod", // Prime Video alt
+        "com.disney.disneyplus",
+        "com.hbo.hbonow",
+        "in.startv.hotstar", // Disney+ Hotstar
+        "com.voot.android",
+        "com.jio.media.stb",
+        "com.jio.jioplay.tv",
+        "com.sonyliv",
+        "com.zee5.hipi",
+        "com.eros.now",
+        "com.alt.altbalaji.ui",
+        "com.mxplayer.mx",
 
-        // video player apps
+        // ==================== VIDEO PLAYER APPS ====================
         "com.mxtech.videoplayer.ad",
         "com.mxtech.videoplayer.pro",
         "com.google.android.apps.mediashell",
         "com.google.android.videos",
         "org.videolan.vlc",
+        "com.brouken.player", // Just (Video) Player
 
-        // social media apps with video content
+        // ==================== SOCIAL MEDIA APPS ====================
         "com.instagram.android",
         "com.instagram.lite",
+        "com.instagram.barcelona", // Threads
         "com.zhiliaoapp.musically", // TikTok
         "com.ss.android.ugc.trill", // TikTok alternate
+        "com.facebook.katana",
+        "com.facebook.lite",
+        "com.snapchat.android",
+        "com.reddit.frontpage",
+        "com.twitter.android",
+        "com.twitter.android.lite",
+        "com.pinterest",
+        "com.tumblr",
+        "com.bereal.ft",
+        "com.myjosh", // Josh
+        "in.dailyhunt.dh.moj", // Moj
+        "com.mxtech.videoplayer.takatak", // MX TakaTak
 
-        // screen mirroring apps
+        // ==================== MESSAGING APPS ====================
+        "com.whatsapp",
+        "com.whatsapp.w4b",
+        "org.telegram.messenger",
+        "org.thunderdog.challegram", // Telegram X
+        "com.discord",
+        "com.Slack",
+        "com.facebook.orca", // Messenger
+        "com.facebook.mlite", // Messenger Lite
+        "org.thoughtcrime.securesms", // Signal
+
+        // ==================== SCREEN MIRRORING/CASTING ====================
         "com.nicnet.netmirror",
+        "com.AirDroid.ScreenMirrorClient",
 
-        // education apps
+        // ==================== EDUCATION APPS ====================
         "xyz.penpencil.physicswala",
         "xyz.penpencil.pathshala",
+        "com.unacademyapp",
+        "com.byjus.thelearningapp",
+        "com.vedantu",
+        "com.doubtnutapp",
+        "org.khanacademy.android",
+        "org.coursera.android",
+        "com.udemy.android",
+        "com.linkedin.android.learning",
+        "com.duolingo",
+        "com.brainly",
+
+        // ==================== GAMING APPS (that may have media content) ====================
+        "com.discord", // Already included in messaging but keeping for completeness
+        "tv.twitch.android.app", // Already included but relevant for gaming
+
+        // ==================== PODCAST APPS ====================
+        "com.google.android.apps.podcasts",
+        "com.spotify.music", // Already included but has podcasts
+        "fm.castbox.audiobook.radio.podcast",
+        "au.com.shiftyjelly.pocketcasts",
+        "com.bambuna.podcastaddict",
+
+        // ==================== AUDIOBOOK APPS ====================
+        "com.audible.application",
+        "com.google.android.apps.books",
+        "com.amazon.kindle",
     )
 
     //Experimental RPC Preferences

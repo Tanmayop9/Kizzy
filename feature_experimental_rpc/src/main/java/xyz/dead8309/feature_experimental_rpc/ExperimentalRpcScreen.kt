@@ -72,6 +72,8 @@ private val completions = listOf(
     TemplateKeys.MEDIA_TITLE to R.string.completion_media_title,
     TemplateKeys.MEDIA_ARTIST to R.string.completion_media_artist,
     TemplateKeys.MEDIA_AUTHOR to R.string.completion_media_author,
+    TemplateKeys.MEDIA_ALBUM to R.string.completion_media_album,
+    TemplateKeys.MEDIA_ALBUM_ARTIST to R.string.completion_media_album_artist,
     TemplateKeys.APP_NAME to R.string.completion_app_name,
     TemplateKeys.APP_ACTIVITY to R.string.completion_app_activity,
     TemplateKeys.APP_STATE to R.string.completion_app_state,
