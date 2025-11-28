@@ -4,7 +4,7 @@
  *  *  * Copyright (C) 2022
  *  *  * Credits.kt is part of Kizzy
  *  *  *  and can not be copied and/or distributed without the express
- *  *  * permission of yzziK(Vaibhav)
+ *  *  * permission of Tanmay
  *  *  *****************************************************************
  *
  *
@@ -17,16 +17,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.LocalAbsoluteTonalElevation
@@ -41,9 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,7 +47,6 @@ import com.my.kizzy.resources.R
 import com.my.kizzy.ui.components.BackButton
 import com.my.kizzy.ui.components.CreditItem
 import com.my.kizzy.ui.components.Subtitle
-import kotlin.math.floor
 
 data class Credit(val title: String = "", val license: String = "", val url: String = "")
 
@@ -76,6 +68,13 @@ val creditsList = listOf(
     Credit("Rich-Presence-U", GPL_V3, nintendoRepo),
     Credit("Xbox-Rich-Presence-Discord", MIT, XboxRpc),
     Credit("Monet", APACHE_V2, monet)
+)
+
+// Developer/Owner info
+private val developer = Contributor(
+    avatar = "https://avatars.githubusercontent.com/Tanmayop9",
+    name = "Tanmay",
+    url = "https://github.com/Tanmayop9"
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,6 +107,13 @@ fun Credits(state: CreditScreenState, onBackPressed: () -> Unit) {
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
             item {
+                Subtitle(text = stringResource(id = R.string.contributors))
+            }
+            item {
+                // Show only Tanmay as the developer
+                ContributorItem(contributor = developer)
+            }
+            item {
                 Subtitle(text = stringResource(id = R.string.design_credits))
             }
             items(creditsList) { item: Credit ->
@@ -116,46 +122,6 @@ fun Credits(state: CreditScreenState, onBackPressed: () -> Unit) {
                     description = item.license
                 ) {
                     openUrl(item.url)
-                }
-            }
-            item {
-                Subtitle(text = stringResource(id = R.string.contributors))
-            }
-            item {
-                when (state) {
-                    is CreditScreenState.Error -> {
-                        Text(
-                            text = state.error + "",
-                            modifier = Modifier
-                                .padding(16.dp, 20.dp),
-                        )
-                    }
-
-                    CreditScreenState.Loading -> {
-                        CircularProgressIndicator(
-                            modifier = Modifier
-                                .padding(16.dp, 20.dp)
-                        )
-                    }
-
-                    is CreditScreenState.LoadingCompleted -> {
-                        // dirty way to enable LazyVerticalGird,
-                        // TODO update this part once compose team release out a better
-                        //  implementation of nested scrolling
-                        val itemsPerRowAccordingToScreenWidth =
-                            floor((LocalConfiguration.current.screenWidthDp.dp / 90).value)
-                        val totalHeightForLazyGrid =
-                            state.contributors.size.div(itemsPerRowAccordingToScreenWidth)
-                                .times((96)).dp
-                        LazyVerticalGrid(
-                            columns = GridCells.Adaptive(90.dp),
-                            modifier = Modifier.height(totalHeightForLazyGrid)
-                        ) {
-                            items(state.contributors) {
-                                ContributorItem(contributor = it)
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -221,9 +187,9 @@ fun CreditsPreview3() {
         state = CreditScreenState.LoadingCompleted(
             listOf(
                 Contributor(
-                    avatar = "",
-                    name = "dead8309",
-                    url = "https://github.com/dead8309"
+                    avatar = "https://avatars.githubusercontent.com/Tanmayop9",
+                    name = "Tanmay",
+                    url = "https://github.com/Tanmayop9"
                 )
             )
         ),
