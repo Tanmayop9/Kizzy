@@ -66,11 +66,11 @@ internal fun DiscordLoginWebView(
             // Set cache mode for better compatibility
             settings.cacheMode = WebSettings.LOAD_DEFAULT
             
-            // Allow mixed content for better compatibility
-            settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
-            
             // Enable WebAuthn/Passkey support using AndroidX WebKit
-            // This is required for passkey login on Discord
+            // This allows users to authenticate using passkeys on Discord
+            // Note: If WEB_AUTHENTICATION feature is not supported (older WebView versions),
+            // the user will need to fall back to traditional password login.
+            // The feature requires Android WebView 116+ to work properly.
             if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_AUTHENTICATION)) {
                 WebSettingsCompat.setWebAuthenticationSupport(
                     settings,
