@@ -256,6 +256,11 @@
     <string name="stream_vc_instructions">1. Enable Developer Mode in Discord Settings → Advanced\n2. Right-click on the server/channel and select \"Copy ID\"\n3. Enter a valid YouTube or Twitch URL\n4. Click \"Go Live\" to start streaming\n\nNote: Your Discord profile will show a purple \"LIVE\" indicator when streaming.</string>
     <string name="stream_vc_invalid_url">Please enter a valid YouTube or Twitch URL</string>
 
+    <!-- Section Headers -->
+    <string name="server_configuration">Server Configuration</string>
+    <string name="stream_settings">Stream Settings</string>
+    <string name="voice_settings">Voice Settings</string>
+
     <!-- Advanced Features -->
     <string name="auto_start_on_boot">Auto-Start on Boot</string>
     <string name="auto_start_on_boot_desc">Automatically start RPC when your device boots up</string>

@@ -207,7 +207,7 @@ fun VCStayScreen(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = "Server Configuration",
+                            text = stringResource(id = R.string.server_configuration),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.padding(bottom = 12.dp)
@@ -255,7 +255,7 @@ fun VCStayScreen(
                         modifier = Modifier.padding(vertical = 8.dp)
                     ) {
                         Text(
-                            text = "Voice Settings",
+                            text = stringResource(id = R.string.voice_settings),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp, top = 8.dp)

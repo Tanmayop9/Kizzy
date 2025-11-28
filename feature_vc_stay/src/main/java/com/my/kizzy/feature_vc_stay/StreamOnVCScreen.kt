@@ -101,7 +101,7 @@ fun StreamOnVCScreen(
     val canStartStream = guildId.isNotEmpty() && 
                          channelId.isNotEmpty() && 
                          youtubeUrl.isNotEmpty() && 
-                         StreamOnVCService.isValidYoutubeUrl(youtubeUrl)
+                         StreamOnVCService.isValidStreamUrl(youtubeUrl)
 
     if (showHelpDialog) {
         AlertDialog(
@@ -165,7 +165,7 @@ fun StreamOnVCScreen(
                     streamOnVCRunning = !streamOnVCRunning
                     when (streamOnVCRunning) {
                         true -> {
-                            if (!StreamOnVCService.isValidYoutubeUrl(youtubeUrl)) {
+                            if (!StreamOnVCService.isValidStreamUrl(youtubeUrl)) {
                                 Toast.makeText(
                                     context,
                                     context.getString(R.string.stream_vc_invalid_url),
@@ -226,7 +226,7 @@ fun StreamOnVCScreen(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = "Server Configuration",
+                            text = stringResource(id = R.string.server_configuration),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.padding(bottom = 12.dp)
@@ -276,7 +276,7 @@ fun StreamOnVCScreen(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         Text(
-                            text = "Stream Settings",
+                            text = stringResource(id = R.string.stream_settings),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.padding(bottom = 12.dp)
@@ -291,8 +291,8 @@ fun StreamOnVCScreen(
                             label = stringResource(id = R.string.stream_vc_youtube_url),
                             placeholder = stringResource(id = R.string.stream_vc_youtube_url_hint),
                             icon = Icons.Default.PlayArrow,
-                            isError = youtubeUrl.isNotEmpty() && !StreamOnVCService.isValidYoutubeUrl(youtubeUrl),
-                            errorMessage = if (youtubeUrl.isNotEmpty() && !StreamOnVCService.isValidYoutubeUrl(youtubeUrl)) 
+                            isError = youtubeUrl.isNotEmpty() && !StreamOnVCService.isValidStreamUrl(youtubeUrl),
+                            errorMessage = if (youtubeUrl.isNotEmpty() && !StreamOnVCService.isValidStreamUrl(youtubeUrl)) 
                                 stringResource(id = R.string.stream_vc_invalid_url) else null,
                             enabled = !streamOnVCRunning
                         )

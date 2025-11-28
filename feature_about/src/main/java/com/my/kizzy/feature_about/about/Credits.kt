@@ -72,7 +72,7 @@ val creditsList = listOf(
 
 // Developer/Owner info
 private val developer = Contributor(
-    avatar = "https://avatars.githubusercontent.com/u/Tanmayop9",
+    avatar = "https://avatars.githubusercontent.com/Tanmayop9",
     name = "Tanmay",
     url = "https://github.com/Tanmayop9"
 )
@@ -187,7 +187,7 @@ fun CreditsPreview3() {
         state = CreditScreenState.LoadingCompleted(
             listOf(
                 Contributor(
-                    avatar = "https://avatars.githubusercontent.com/u/Tanmayop9",
+                    avatar = "https://avatars.githubusercontent.com/Tanmayop9",
                     name = "Tanmay",
                     url = "https://github.com/Tanmayop9"
                 )
