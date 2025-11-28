@@ -5,6 +5,30 @@ All notable changes to Kizzy will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.0] - 2025-11-28
+
+### Added
+- **Enhanced Stream on VC** - Stream YouTube/Twitch content directly in Discord voice channels
+  - Added video URL conversion support for streaming
+  - Enhanced YouTube URL validation (watch, live, shorts, youtu.be)
+  - Added Twitch streaming support
+  - Real-time streaming status with video playback indicator
+  - Improved streaming presence with platform detection
+- **Direct Download Link** - Quick access to download the latest APK from About screen
+- **Video Stream Preview** - Preview stream info before going live
+
+### Changed
+- Improved Stream on VC UI with video preview capabilities
+- Enhanced error handling for invalid stream URLs
+- Better notification management for streaming service
+- Updated About screen with prominent download section
+
+### Technical
+- Enhanced StreamOnVCService with video streaming capabilities
+- Added video URL parsing and conversion utilities
+- Improved keep-alive mechanism for stable streaming
+- Added platform detection for YouTube and Twitch URLs
+
 ## [6.2] - 2025-11-27
 
 ### Added

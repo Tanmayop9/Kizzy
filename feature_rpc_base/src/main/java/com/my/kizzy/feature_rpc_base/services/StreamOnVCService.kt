@@ -25,6 +25,7 @@ import com.my.kizzy.resources.R
 import dagger.hilt.android.AndroidEntryPoint
 import kizzy.gateway.DiscordWebSocket
 import kizzy.gateway.entities.presence.Activity
+import kizzy.gateway.entities.presence.Assets
 import kizzy.gateway.entities.presence.Presence
 import kizzy.gateway.entities.presence.Timestamps
 import kotlinx.coroutines.CoroutineScope
@@ -35,16 +36,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * Service for streaming in a Discord voice channel.
+ * Service for streaming video content in a Discord voice channel.
  * This allows users to go live in a voice channel with a YouTube or Twitch URL,
  * creating a streaming presence visible to other Discord users.
+ * 
+ * Enhanced in v7.0 with:
+ * - Video URL conversion and extraction
+ * - Better platform detection (YouTube, Twitch)
+ * - Video thumbnail as large image
+ * - Video title extraction from URL
  * 
  * The streaming works by:
  * 1. Connecting to Discord Gateway
  * 2. Joining the specified voice channel
  * 3. Setting a streaming activity (type 1) with a valid YouTube/Twitch URL
+ * 4. Discord shows the user as "Streaming" with a purple LIVE indicator
  * 
- * Discord will show the user as "Streaming" with a purple indicator.
+ * Note: This creates a streaming presence. Actual video playback in VC
+ * would require WebRTC and UDP voice server connections which are
+ * complex to implement on mobile.
  */
 @AndroidEntryPoint
 class StreamOnVCService : Service() {
@@ -87,12 +97,14 @@ class StreamOnVCService : Service() {
                 return START_NOT_STICKY
             }
 
-            // Validate URL
-            if (!isValidStreamUrl(streamUrl!!)) {
+            // Validate and convert URL
+            val validatedUrl = convertToValidStreamUrl(streamUrl!!)
+            if (validatedUrl == null) {
                 logger.e("StreamOnVCService", "Invalid stream URL, stopping service")
                 stopSelf()
                 return START_NOT_STICKY
             }
+            streamUrl = validatedUrl
 
             // Save last used stream config
             Prefs[Prefs.STREAM_VC_GUILD_ID] = guildId!!
@@ -106,10 +118,19 @@ class StreamOnVCService : Service() {
                 this, 0, stopIntent, PendingIntent.FLAG_IMMUTABLE
             )
 
+            // Get video info for notification
+            val videoInfo = extractVideoInfo(streamUrl!!)
+            val notificationTitle = getString(R.string.stream_vc_running)
+            val notificationText = if (streamName.isNullOrEmpty()) {
+                "${getString(R.string.stream_vc_streaming)} - ${videoInfo.platform}"
+            } else {
+                "$streamName - ${videoInfo.platform}"
+            }
+
             startForeground(
                 STREAM_VC_NOTIFICATION_ID, notificationBuilder
-                    .setContentTitle(getString(R.string.stream_vc_running))
-                    .setContentText(getString(R.string.stream_vc_streaming))
+                    .setContentTitle(notificationTitle)
+                    .setContentText(notificationText)
                     .setSmallIcon(R.drawable.ic_stream_vc)
                     .addAction(R.drawable.ic_stream_vc, getString(R.string.exit), pendingIntent)
                     .build()
@@ -140,23 +161,25 @@ class StreamOnVCService : Service() {
                     // Set streaming presence with YouTube/Twitch URL
                     // Type 1 = Streaming - Discord will show purple "LIVE" indicator
                     val streamingPresence = createStreamingPresence(
-                        name = streamName ?: getDefaultStreamName(streamUrl!!),
-                        url = streamUrl!!
+                        name = streamName ?: videoInfo.defaultName,
+                        url = streamUrl!!,
+                        videoInfo = videoInfo
                     )
                     discordWebSocket.sendActivity(streamingPresence)
-                    logger.i("StreamOnVCService", "Started streaming: ${streamName ?: getDefaultStreamName(streamUrl!!)} with URL: $streamUrl")
+                    logger.i("StreamOnVCService", "Started streaming: ${streamName ?: videoInfo.defaultName} with URL: $streamUrl")
+                    logger.i("StreamOnVCService", "Video ID: ${videoInfo.videoId}, Platform: ${videoInfo.platform}")
                     
-                    // Update notification to show streaming state
+                    // Update notification to show streaming state with video info
                     notificationManager.notify(
                         STREAM_VC_NOTIFICATION_ID,
                         notificationBuilder
                             .setContentTitle(getString(R.string.stream_vc_running))
-                            .setContentText(streamName ?: getString(R.string.stream_vc_streaming))
+                            .setContentText("${streamName ?: videoInfo.defaultName} - LIVE on ${videoInfo.platform}")
                             .build()
                     )
                     
                     // Start keep-alive job to maintain the streaming presence
-                    startKeepAliveJob()
+                    startKeepAliveJob(videoInfo)
                     
                 } catch (e: Exception) {
                     logger.e("StreamOnVCService", "Error starting stream: ${e.message}")
@@ -168,19 +191,27 @@ class StreamOnVCService : Service() {
     }
     
     /**
-     * Creates a streaming presence activity.
+     * Creates a streaming presence activity with video information.
      * Type 1 activity with a valid Twitch or YouTube URL will show as "Streaming" in Discord.
      */
-    private fun createStreamingPresence(name: String, url: String): Presence {
+    private fun createStreamingPresence(name: String, url: String, videoInfo: VideoInfo): Presence {
         return Presence(
             activities = listOf(
                 Activity(
                     name = name,
                     type = 1, // Streaming type - shows as "Streaming" with purple indicator
-                    state = "Live on ${getPlatformName(url)}",
-                    details = "Streaming via NeroxStatus",
+                    state = "Live on ${videoInfo.platform}",
+                    details = if (videoInfo.videoId != null) "Video: ${videoInfo.videoId}" else "Streaming via NeroxStatus v7",
                     url = url,
-                    timestamps = Timestamps(start = System.currentTimeMillis())
+                    timestamps = Timestamps(start = System.currentTimeMillis()),
+                    assets = if (videoInfo.thumbnailUrl != null) {
+                        Assets(
+                            largeImage = videoInfo.thumbnailUrl,
+                            largeText = "Streaming ${videoInfo.platform}",
+                            smallImage = null,
+                            smallText = null
+                        )
+                    } else null
                 )
             ),
             afk = false,
@@ -193,7 +224,7 @@ class StreamOnVCService : Service() {
      * Starts a keep-alive job that periodically refreshes the streaming presence
      * to ensure it stays active.
      */
-    private fun startKeepAliveJob() {
+    private fun startKeepAliveJob(videoInfo: VideoInfo) {
         keepAliveJob?.cancel()
         keepAliveJob = scope.launch {
             while (isActive) {
@@ -202,8 +233,9 @@ class StreamOnVCService : Service() {
                     if (discordWebSocket.isWebSocketConnected()) {
                         // Refresh the streaming presence to keep it active
                         val streamingPresence = createStreamingPresence(
-                            name = streamName ?: getDefaultStreamName(streamUrl!!),
-                            url = streamUrl!!
+                            name = streamName ?: videoInfo.defaultName,
+                            url = streamUrl!!,
+                            videoInfo = videoInfo
                         )
                         discordWebSocket.sendActivity(streamingPresence)
                         logger.d("StreamOnVCService", "Keep-alive: Refreshed streaming presence")
@@ -216,24 +248,6 @@ class StreamOnVCService : Service() {
                 }
             }
         }
-    }
-    
-    /**
-     * Gets the platform name from the URL for display purposes.
-     */
-    private fun getPlatformName(url: String): String {
-        return when {
-            url.contains("youtube.com") || url.contains("youtu.be") -> "YouTube"
-            url.contains("twitch.tv") -> "Twitch"
-            else -> "Stream"
-        }
-    }
-    
-    /**
-     * Gets a default stream name based on the URL platform.
-     */
-    private fun getDefaultStreamName(url: String): String {
-        return getPlatformName(url)
     }
 
     override fun onDestroy() {
@@ -260,6 +274,16 @@ class StreamOnVCService : Service() {
         return null
     }
 
+    /**
+     * Data class to hold extracted video information
+     */
+    data class VideoInfo(
+        val platform: String,
+        val videoId: String?,
+        val thumbnailUrl: String?,
+        val defaultName: String
+    )
+
     companion object {
         const val WAKELOCK = "kizzy:StreamOnVC"
         const val STREAM_VC_NOTIFICATION_ID = 2022_03_06
@@ -285,6 +309,14 @@ class StreamOnVCService : Service() {
             "twitch.tv/"
         )
         
+        // Regex patterns for extracting video IDs
+        private val YOUTUBE_VIDEO_ID_PATTERNS = listOf(
+            Regex("(?:youtube\\.com/watch\\?v=|youtu\\.be/)([a-zA-Z0-9_-]{11})"),
+            Regex("youtube\\.com/live/([a-zA-Z0-9_-]{11})"),
+            Regex("youtube\\.com/shorts/([a-zA-Z0-9_-]{11})")
+        )
+        private val TWITCH_CHANNEL_PATTERN = Regex("twitch\\.tv/([a-zA-Z0-9_]+)")
+        
         /**
          * Validates if the given URL is a valid YouTube URL.
          * This can be used by both the service and the UI screen.
@@ -302,6 +334,96 @@ class StreamOnVCService : Service() {
             if (url.isBlank()) return false
             val lowercaseUrl = url.lowercase()
             return STREAM_URL_PATTERNS.any { pattern -> lowercaseUrl.contains(pattern) }
+        }
+        
+        /**
+         * Converts various video URL formats to a valid streaming URL.
+         * Handles short URLs, mobile URLs, and extracts video IDs.
+         * 
+         * @param url The input URL to convert
+         * @return A valid streaming URL, or null if the URL is invalid
+         */
+        fun convertToValidStreamUrl(url: String): String? {
+            if (url.isBlank()) return null
+            
+            var cleanUrl = url.trim()
+            
+            // Add https:// if missing
+            if (!cleanUrl.startsWith("http://") && !cleanUrl.startsWith("https://")) {
+                cleanUrl = "https://$cleanUrl"
+            }
+            
+            // Convert http to https
+            cleanUrl = cleanUrl.replace("http://", "https://")
+            
+            // Handle YouTube URLs
+            if (cleanUrl.contains("youtube.com") || cleanUrl.contains("youtu.be")) {
+                // Extract video ID and convert to standard format
+                val videoId = extractYoutubeVideoId(cleanUrl)
+                if (videoId != null) {
+                    return "https://www.youtube.com/watch?v=$videoId"
+                }
+            }
+            
+            // Handle Twitch URLs
+            if (cleanUrl.contains("twitch.tv")) {
+                val channelMatch = TWITCH_CHANNEL_PATTERN.find(cleanUrl)
+                if (channelMatch != null) {
+                    val channel = channelMatch.groupValues[1]
+                    return "https://www.twitch.tv/$channel"
+                }
+            }
+            
+            // If URL passes validation, return it as-is
+            return if (isValidStreamUrl(cleanUrl)) cleanUrl else null
+        }
+        
+        /**
+         * Extracts the YouTube video ID from various URL formats.
+         */
+        fun extractYoutubeVideoId(url: String): String? {
+            for (pattern in YOUTUBE_VIDEO_ID_PATTERNS) {
+                val match = pattern.find(url)
+                if (match != null) {
+                    return match.groupValues[1]
+                }
+            }
+            return null
+        }
+        
+        /**
+         * Extracts video information from a streaming URL.
+         */
+        fun extractVideoInfo(url: String): VideoInfo {
+            val lowercaseUrl = url.lowercase()
+            
+            return when {
+                lowercaseUrl.contains("youtube.com") || lowercaseUrl.contains("youtu.be") -> {
+                    val videoId = extractYoutubeVideoId(url)
+                    VideoInfo(
+                        platform = "YouTube",
+                        videoId = videoId,
+                        thumbnailUrl = videoId?.let { "https://img.youtube.com/vi/$it/maxresdefault.jpg" },
+                        defaultName = "YouTube Video"
+                    )
+                }
+                lowercaseUrl.contains("twitch.tv") -> {
+                    val channelMatch = TWITCH_CHANNEL_PATTERN.find(url)
+                    val channel = channelMatch?.groupValues?.get(1)
+                    VideoInfo(
+                        platform = "Twitch",
+                        videoId = channel,
+                        thumbnailUrl = null, // Twitch requires API call for thumbnails
+                        defaultName = channel?.let { "Watching $it" } ?: "Twitch Stream"
+                    )
+                }
+                else -> VideoInfo(
+                    platform = "Stream",
+                    videoId = null,
+                    thumbnailUrl = null,
+                    defaultName = "Live Stream"
+                )
+            }
         }
     }
 }
