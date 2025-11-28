@@ -82,15 +82,10 @@ fun StreamOnVCScreen(
         canScroll = { true }
     )
 
-    // Validate YouTube URL
-    fun isValidYoutubeUrl(url: String): Boolean {
-        return url.contains("youtube.com") || url.contains("youtu.be")
-    }
-
     val canStartStream = guildId.isNotEmpty() && 
                          channelId.isNotEmpty() && 
                          youtubeUrl.isNotEmpty() && 
-                         isValidYoutubeUrl(youtubeUrl)
+                         StreamOnVCService.isValidYoutubeUrl(youtubeUrl)
 
     if (showHelpDialog) {
         AlertDialog(
@@ -139,7 +134,7 @@ fun StreamOnVCScreen(
                 streamOnVCRunning = !streamOnVCRunning
                 when (streamOnVCRunning) {
                     true -> {
-                        if (!isValidYoutubeUrl(youtubeUrl)) {
+                        if (!StreamOnVCService.isValidYoutubeUrl(youtubeUrl)) {
                             Toast.makeText(
                                 context,
                                 context.getString(R.string.stream_vc_invalid_url),
@@ -238,9 +233,9 @@ fun StreamOnVCScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
                         singleLine = true,
-                        isError = youtubeUrl.isNotEmpty() && !isValidYoutubeUrl(youtubeUrl),
+                        isError = youtubeUrl.isNotEmpty() && !StreamOnVCService.isValidYoutubeUrl(youtubeUrl),
                         supportingText = {
-                            if (youtubeUrl.isNotEmpty() && !isValidYoutubeUrl(youtubeUrl)) {
+                            if (youtubeUrl.isNotEmpty() && !StreamOnVCService.isValidYoutubeUrl(youtubeUrl)) {
                                 Text(
                                     text = stringResource(id = R.string.stream_vc_invalid_url),
                                     color = MaterialTheme.colorScheme.error

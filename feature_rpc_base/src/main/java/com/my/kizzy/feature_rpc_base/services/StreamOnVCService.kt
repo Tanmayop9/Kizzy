@@ -114,7 +114,7 @@ class StreamOnVCService : Service() {
                 try {
                     discordWebSocket.connect()
                     // Small delay to ensure connection is established
-                    delay(2000)
+                    delay(CONNECTION_DELAY_MS)
                     
                     // Join the voice channel first
                     discordWebSocket.joinVoiceChannel(
@@ -126,7 +126,7 @@ class StreamOnVCService : Service() {
                     logger.i("StreamOnVCService", "Joined voice channel: $channelId in guild: $guildId")
                     
                     // Small delay before setting streaming presence
-                    delay(1000)
+                    delay(PRESENCE_DELAY_MS)
                     
                     // Set streaming presence with YouTube URL
                     val streamingPresence = Presence(
@@ -162,10 +162,6 @@ class StreamOnVCService : Service() {
         return START_STICKY
     }
 
-    private fun isValidYoutubeUrl(url: String): Boolean {
-        return url.contains("youtube.com") || url.contains("youtu.be")
-    }
-
     override fun onDestroy() {
         scope.launch {
             try {
@@ -196,5 +192,27 @@ class StreamOnVCService : Service() {
         const val EXTRA_CHANNEL_ID = "channel_id"
         const val EXTRA_YOUTUBE_URL = "youtube_url"
         const val EXTRA_STREAM_NAME = "stream_name"
+        
+        // Delay constants for connection establishment
+        private const val CONNECTION_DELAY_MS = 2000L
+        private const val PRESENCE_DELAY_MS = 1000L
+        
+        // YouTube URL patterns for validation
+        private val YOUTUBE_URL_PATTERNS = listOf(
+            "youtube.com/watch",
+            "youtube.com/live",
+            "youtu.be/",
+            "youtube.com/shorts"
+        )
+        
+        /**
+         * Validates if the given URL is a valid YouTube URL.
+         * This can be used by both the service and the UI screen.
+         */
+        fun isValidYoutubeUrl(url: String): Boolean {
+            if (url.isBlank()) return false
+            val lowercaseUrl = url.lowercase()
+            return YOUTUBE_URL_PATTERNS.any { pattern -> lowercaseUrl.contains(pattern) }
+        }
     }
 }

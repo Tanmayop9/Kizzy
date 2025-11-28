@@ -133,10 +133,6 @@ fun homeFeaturesProvider(
                     ctx.stopService(Intent(ctx, AppDetectionService::class.java))
                     ctx.stopService(Intent(ctx, VCStayService::class.java))
                     ctx.stopService(Intent(ctx, StreamOnVCService::class.java))
-                    ctx.stopService(Intent(ctx, ExperimentalRpc::class.java))
-                    ctx.stopService(Intent(ctx, AppDetectionService::class.java))
-                    ctx.stopService(Intent(ctx, VCStayService::class.java))
-                    ctx.stopService(Intent(ctx, StreamOnVCService::class.java))
                     ctx.startService(intent)
                 } else
                     ctx.stopService(Intent(ctx, CustomRpcService::class.java))
