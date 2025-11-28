@@ -13,4 +13,5 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.coil)
+    implementation(projects.gateway)
 }
