@@ -166,7 +166,7 @@ class StreamOnVCService : Service() {
                         videoInfo = videoInfo
                     )
                     discordWebSocket.sendActivity(streamingPresence)
-                    logger.i("StreamOnVCService", "Started streaming: ${streamName ?: videoInfo.defaultName} with URL: $streamUrl")
+                    logger.i("StreamOnVCService", "Started streaming: ${streamName ?: videoInfo.defaultName}")
                     logger.i("StreamOnVCService", "Video ID: ${videoInfo.videoId}, Platform: ${videoInfo.platform}")
                     
                     // Update notification to show streaming state with video info
@@ -274,16 +274,6 @@ class StreamOnVCService : Service() {
         return null
     }
 
-    /**
-     * Data class to hold extracted video information
-     */
-    data class VideoInfo(
-        val platform: String,
-        val videoId: String?,
-        val thumbnailUrl: String?,
-        val defaultName: String
-    )
-
     companion object {
         const val WAKELOCK = "kizzy:StreamOnVC"
         const val STREAM_VC_NOTIFICATION_ID = 2022_03_06
@@ -299,6 +289,9 @@ class StreamOnVCService : Service() {
         // Keep-alive interval to refresh streaming presence (5 minutes)
         private const val KEEP_ALIVE_INTERVAL_MS = 300_000L
         
+        // YouTube video ID is always 11 characters
+        private const val YOUTUBE_VIDEO_ID_LENGTH = 11
+        
         // Stream URL patterns for validation
         // Discord only shows "LIVE" streaming for Twitch and YouTube URLs
         private val STREAM_URL_PATTERNS = listOf(
@@ -310,12 +303,24 @@ class StreamOnVCService : Service() {
         )
         
         // Regex patterns for extracting video IDs
+        // YouTube video IDs are exactly 11 characters: alphanumeric, underscore, or hyphen
         private val YOUTUBE_VIDEO_ID_PATTERNS = listOf(
-            Regex("(?:youtube\\.com/watch\\?v=|youtu\\.be/)([a-zA-Z0-9_-]{11})"),
-            Regex("youtube\\.com/live/([a-zA-Z0-9_-]{11})"),
-            Regex("youtube\\.com/shorts/([a-zA-Z0-9_-]{11})")
+            Regex("(?:youtube\\.com/watch\\?v=|youtu\\.be/)([a-zA-Z0-9_-]{$YOUTUBE_VIDEO_ID_LENGTH})"),
+            Regex("youtube\\.com/live/([a-zA-Z0-9_-]{$YOUTUBE_VIDEO_ID_LENGTH})"),
+            Regex("youtube\\.com/shorts/([a-zA-Z0-9_-]{$YOUTUBE_VIDEO_ID_LENGTH})")
         )
         private val TWITCH_CHANNEL_PATTERN = Regex("twitch\\.tv/([a-zA-Z0-9_]+)")
+        
+        /**
+         * Data class to hold extracted video information.
+         * Defined in companion object for easier access from other files.
+         */
+        data class VideoInfo(
+            val platform: String,
+            val videoId: String?,
+            val thumbnailUrl: String?,
+            val defaultName: String
+        )
         
         /**
          * Validates if the given URL is a valid YouTube URL.
