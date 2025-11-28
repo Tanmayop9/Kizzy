@@ -257,6 +257,10 @@
     <string name="stream_vc_how_to">How to stream on VC</string>
     <string name="stream_vc_instructions">1. Enable Developer Mode in Discord Settings → Advanced\n2. Right-click on the server/channel and select \"Copy ID\"\n3. Enter a valid YouTube or Twitch URL\n4. Click \"Go Live\" to start streaming\n\nNote: Your Discord profile will show a purple \"LIVE\" indicator when streaming.</string>
     <string name="stream_vc_invalid_url">Please enter a valid YouTube or Twitch URL</string>
+    <string name="stream_vc_video_preview">Video Preview</string>
+    <string name="stream_vc_ready_to_stream">Ready to Stream</string>
+    <string name="stream_vc_platform">Platform</string>
+    <string name="stream_vc_video_id">Video ID</string>
 
     <!-- Section Headers -->
     <string name="server_configuration">Server Configuration</string>
